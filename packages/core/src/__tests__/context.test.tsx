@@ -821,7 +821,7 @@ describe("UploadProvider + useUpload", () => {
 		expect(result.current.files[0].error).toBe("Custom processing error");
 	});
 
-	it("revokes thumbnail when file transitions to ready", async () => {
+	it("preserves thumbnail when sync adapter transitions file to ready", async () => {
 		vi.mocked(createThumbnail).mockResolvedValue("blob:thumb-123");
 
 		const adapter = createMockAdapter({
@@ -844,7 +844,10 @@ describe("UploadProvider + useUpload", () => {
 		});
 
 		expect(result.current.files[0].status).toBe("ready");
-		expect(revokeThumbnail).toHaveBeenCalledWith("blob:thumb-123");
+		// Blob lifecycle policy: revoke only on removeFile + unmount.
+		// Local thumbnail may be preserved past ready (Thumbnail component
+		// shows the video branch when playbackUrl is set anyway).
+		expect(revokeThumbnail).not.toHaveBeenCalledWith("blob:thumb-123");
 	});
 
 	it("revokes remaining thumbnails on unmount", async () => {

@@ -171,11 +171,6 @@ export function UploadProvider<TOptions>({
 				);
 
 				if (uploadResult.playbackUrl) {
-					const thumbnailUri = thumbnailUrisRef.current.get(file.id);
-					if (thumbnailUri) {
-						revokeThumbnail(thumbnailUri);
-						thumbnailUrisRef.current.delete(file.id);
-					}
 					dispatchWithStatusTracking({
 						id: file.id,
 						type: "UPDATE_FILE",
@@ -183,7 +178,6 @@ export function UploadProvider<TOptions>({
 							playbackUrl: uploadResult.playbackUrl,
 							progress: 100,
 							status: "ready",
-							thumbnailUri: null,
 							videoId: uploadResult.videoId,
 						},
 					});
