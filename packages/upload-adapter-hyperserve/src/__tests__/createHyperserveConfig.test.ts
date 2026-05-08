@@ -15,17 +15,17 @@ function makeCallbacks() {
 			uploadUrl: "https://s3.example.com/presigned",
 			videoId: "v1",
 		}),
-		getVideoStatus: vi.fn().mockResolvedValue({ status: "failed" }),
+		pollVideoStatus: vi.fn().mockResolvedValue({ status: "failed" }),
 	};
 }
 
 describe("createHyperserveConfig", () => {
 	it("returns config with HyperserveAdapter and HyperserveStatusChecker", () => {
-		const { createUpload, completeUpload, getVideoStatus } = makeCallbacks();
+		const { createUpload, completeUpload, pollVideoStatus } = makeCallbacks();
 		const config = createHyperserveConfig({
 			completeUpload,
 			createUpload,
-			getVideoStatus,
+			pollVideoStatus,
 			uploadOptions: { isPublic: true, resolutions: ["480p"] },
 		});
 
@@ -37,7 +37,7 @@ describe("createHyperserveConfig", () => {
 		});
 	});
 
-	it("omits statusChecker when getVideoStatus is not provided", () => {
+	it("omits statusChecker when pollVideoStatus is not provided", () => {
 		const { createUpload, completeUpload } = makeCallbacks();
 		const config = createHyperserveConfig({
 			completeUpload,
@@ -49,12 +49,12 @@ describe("createHyperserveConfig", () => {
 	});
 
 	it("passes through maxConcurrentUploads, pollingIntervalMs, validate", () => {
-		const { createUpload, completeUpload, getVideoStatus } = makeCallbacks();
+		const { createUpload, completeUpload, pollVideoStatus } = makeCallbacks();
 		const validate = vi.fn().mockResolvedValue({ valid: true });
 		const config = createHyperserveConfig({
 			completeUpload,
 			createUpload,
-			getVideoStatus,
+			pollVideoStatus,
 			maxConcurrentUploads: 5,
 			pollingIntervalMs: 5000,
 			uploadOptions: { isPublic: false, resolutions: ["1080p"] },

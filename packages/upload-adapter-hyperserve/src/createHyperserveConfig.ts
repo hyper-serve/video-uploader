@@ -14,7 +14,12 @@ import type {
 } from "./types.js";
 
 export type HyperserveConfig = HyperserveAdapterConfig & {
-	getVideoStatus?: (videoId: string) => Promise<VideoStatusResult>;
+	/**
+	 * Polling fetch for video status. Provide this if your backend has no
+	 * push channel. For push delivery (webhook, SSE, Realtime broadcast),
+	 * skip this and call `updateFileStatus` from `useUpload()` instead.
+	 */
+	pollVideoStatus?: (videoId: string) => Promise<VideoStatusResult>;
 	maxConcurrentUploads?: number;
 	maxFiles?: number;
 	pollingIntervalMs?: number;
@@ -38,9 +43,9 @@ export function createHyperserveConfig(
 		maxFiles: options.maxFiles,
 		onFileReady: options.onFileReady,
 		onUploadFailed: options.onUploadFailed,
-		statusChecker: options.getVideoStatus
+		statusChecker: options.pollVideoStatus
 			? new HyperserveStatusChecker({
-					getVideoStatus: options.getVideoStatus,
+					getVideoStatus: options.pollVideoStatus,
 					intervalMs: options.pollingIntervalMs,
 				})
 			: undefined,
