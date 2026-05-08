@@ -13,6 +13,7 @@ import type {
 	FileRef,
 	FileState,
 	FileStatus,
+	StatusUpdateData,
 	UploadConfig,
 	UploadContextValue,
 } from "./types.js";
@@ -204,13 +205,13 @@ export function UploadProvider<TOptions>({
 
 				if (cfg.statusChecker) {
 					cfg.statusChecker.checkStatus({
-						onStatusChange: (status, playbackUrl, statusDetail) => {
+						onStatusChange: (status, data) => {
 							if (status === "processing") {
 								dispatch({
 									id: file.id,
 									type: "UPDATE_FILE",
 									updates: {
-										statusDetail: statusDetail ?? null,
+										statusDetail: data?.statusDetail ?? null,
 									},
 								});
 								return;
@@ -232,7 +233,7 @@ export function UploadProvider<TOptions>({
 											? (cfg.errorMessages?.processingFailed ??
 												"Processing failed")
 											: null,
-									playbackUrl: playbackUrl ?? null,
+									playbackUrl: data?.playbackUrl ?? null,
 									status: status === "ready" ? "ready" : "failed",
 									statusDetail: null,
 									...(status === "ready" && { thumbnailUri: null }),
@@ -383,7 +384,7 @@ export function UploadProvider<TOptions>({
 	);
 
 	const updateFileStatus = useCallback(
-		(videoId: string, status: "ready" | "failed", playbackUrl?: string) => {
+		(videoId: string, status: "ready" | "failed", data?: StatusUpdateData) => {
 			const file = filesRef.current.find(
 				(f) => f.videoId === videoId && f.status === "processing",
 			);
@@ -406,7 +407,7 @@ export function UploadProvider<TOptions>({
 							? (configRef.current.errorMessages?.processingFailed ??
 								"Processing failed")
 							: null,
-					playbackUrl: playbackUrl ?? null,
+					playbackUrl: data?.playbackUrl ?? null,
 					status,
 					statusDetail: null,
 					...(status === "ready" && { thumbnailUri: null }),

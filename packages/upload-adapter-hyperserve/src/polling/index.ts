@@ -11,8 +11,7 @@ type PollOptions = {
 	intervalMs: number;
 	onStatusChange: (
 		status: ProcessingStatus,
-		playbackUrl?: string,
-		statusDetail?: string,
+		data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
 	) => void;
 	signal: AbortSignal;
 	videoId: string;
@@ -32,7 +31,7 @@ export function pollVideoStatus(options: PollOptions): void {
 			consecutiveErrors = 0;
 
 			if (result.status === "ready") {
-				onStatusChange("ready", result.playbackUrl);
+				onStatusChange("ready", { playbackUrl: result.playbackUrl });
 				return;
 			}
 
@@ -41,7 +40,7 @@ export function pollVideoStatus(options: PollOptions): void {
 				return;
 			}
 
-			onStatusChange("processing", undefined, result.statusDetail);
+			onStatusChange("processing", { statusDetail: result.statusDetail });
 			setTimeout(poll, intervalMs);
 		} catch (_error) {
 			if (signal.aborted) return;
@@ -69,8 +68,7 @@ export class HyperserveStatusChecker implements StatusChecker {
 		uploadResult: UploadResult;
 		onStatusChange: (
 			status: ProcessingStatus,
-			playbackUrl?: string,
-			statusDetail?: string,
+			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
 		) => void;
 		signal: AbortSignal;
 	}): void {

@@ -47,6 +47,12 @@ export type UploadResult = {
 	metadata?: Record<string, unknown>;
 };
 
+export type StatusUpdateData = {
+	playbackUrl?: string;
+	thumbnailUri?: string;
+	statusDetail?: string;
+};
+
 export type ErrorMessages = {
 	validationError?: string;
 	uploadFailed?: string;
@@ -73,7 +79,7 @@ export type UploadContextValue = {
 	updateFileStatus: (
 		videoId: string,
 		status: "ready" | "failed",
-		playbackUrl?: string,
+		data?: StatusUpdateData,
 	) => void;
 	maxFiles?: number;
 	canAddMore: boolean;
@@ -101,8 +107,7 @@ export interface StatusChecker {
 		uploadResult: UploadResult;
 		onStatusChange: (
 			status: ProcessingStatus,
-			playbackUrl?: string,
-			statusDetail?: string,
+			data?: StatusUpdateData,
 		) => void;
 		signal: AbortSignal;
 	}): void;

@@ -29,10 +29,9 @@ describe("pollVideoStatus", () => {
 
 		await vi.advanceTimersByTimeAsync(0);
 
-		expect(onStatusChange).toHaveBeenCalledWith(
-			"ready",
-			"https://cdn.example.com/video.mp4",
-		);
+		expect(onStatusChange).toHaveBeenCalledWith("ready", {
+			playbackUrl: "https://cdn.example.com/video.mp4",
+		});
 		expect(getVideoStatus).toHaveBeenCalledWith("video-1");
 	});
 
@@ -74,17 +73,14 @@ describe("pollVideoStatus", () => {
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
-		expect(onStatusChange).toHaveBeenCalledWith(
-			"processing",
-			undefined,
-			"encoding",
-		);
+		expect(onStatusChange).toHaveBeenCalledWith("processing", {
+			statusDetail: "encoding",
+		});
 
 		await vi.advanceTimersByTimeAsync(2000);
-		expect(onStatusChange).toHaveBeenCalledWith(
-			"ready",
-			"https://cdn.example.com/video.mp4",
-		);
+		expect(onStatusChange).toHaveBeenCalledWith("ready", {
+			playbackUrl: "https://cdn.example.com/video.mp4",
+		});
 		expect(getVideoStatus).toHaveBeenCalledTimes(2);
 	});
 
@@ -136,10 +132,9 @@ describe("pollVideoStatus", () => {
 		expect(getVideoStatus).toHaveBeenCalledTimes(1);
 
 		await vi.advanceTimersByTimeAsync(1);
-		expect(onStatusChange).toHaveBeenCalledWith(
-			"ready",
-			"https://cdn.example.com/video.mp4",
-		);
+		expect(onStatusChange).toHaveBeenCalledWith("ready", {
+			playbackUrl: "https://cdn.example.com/video.mp4",
+		});
 		expect(getVideoStatus).toHaveBeenCalledTimes(2);
 	});
 
@@ -176,10 +171,9 @@ describe("pollVideoStatus", () => {
 
 		await vi.advanceTimersByTimeAsync(8000);
 		expect(getVideoStatus).toHaveBeenCalledTimes(4);
-		expect(onStatusChange).toHaveBeenCalledWith(
-			"ready",
-			"https://cdn.example.com/video.mp4",
-		);
+		expect(onStatusChange).toHaveBeenCalledWith("ready", {
+			playbackUrl: "https://cdn.example.com/video.mp4",
+		});
 	});
 
 	it("resets backoff after a successful response", async () => {
@@ -212,10 +206,9 @@ describe("pollVideoStatus", () => {
 		// backoff reset — next poll uses intervalMs (1000ms), not 4000ms
 		await vi.advanceTimersByTimeAsync(1000);
 		expect(getVideoStatus).toHaveBeenCalledTimes(3);
-		expect(onStatusChange).toHaveBeenCalledWith(
-			"ready",
-			"https://cdn.example.com/video.mp4",
-		);
+		expect(onStatusChange).toHaveBeenCalledWith("ready", {
+			playbackUrl: "https://cdn.example.com/video.mp4",
+		});
 	});
 
 	it("caps backoff at MAX_BACKOFF_MS (60 seconds)", async () => {
@@ -253,10 +246,9 @@ describe("pollVideoStatus", () => {
 		// 7th fires at 60000ms (capped), not 64000ms
 		await vi.advanceTimersByTimeAsync(60000);
 		expect(getVideoStatus).toHaveBeenCalledTimes(7);
-		expect(onStatusChange).toHaveBeenCalledWith(
-			"ready",
-			"https://cdn.example.com/video.mp4",
-		);
+		expect(onStatusChange).toHaveBeenCalledWith("ready", {
+			playbackUrl: "https://cdn.example.com/video.mp4",
+		});
 	});
 
 	it("passes statusDetail through when processing", async () => {
@@ -277,11 +269,9 @@ describe("pollVideoStatus", () => {
 
 		await vi.advanceTimersByTimeAsync(0);
 
-		expect(onStatusChange).toHaveBeenCalledWith(
-			"processing",
-			undefined,
-			"480p: transcoding, 1080p: pending",
-		);
+		expect(onStatusChange).toHaveBeenCalledWith("processing", {
+			statusDetail: "480p: transcoding, 1080p: pending",
+		});
 	});
 });
 

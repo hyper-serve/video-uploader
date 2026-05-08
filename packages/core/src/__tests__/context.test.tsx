@@ -63,15 +63,14 @@ function createMockStatusChecker(
 	onCheckStatus?: (
 		invoke: (
 			status: "processing" | "ready" | "failed",
-			playbackUrl?: string,
-			statusDetail?: string,
+			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
 		) => void,
 	) => void,
 ): StatusChecker {
 	return {
 		checkStatus: vi.fn((options) => {
-			onCheckStatus?.((status, playbackUrl, statusDetail) => {
-				options.onStatusChange(status, playbackUrl, statusDetail);
+			onCheckStatus?.((status, data) => {
+				options.onStatusChange(status, data);
 			});
 		}),
 	};
@@ -461,8 +460,7 @@ describe("UploadProvider + useUpload", () => {
 	it("runs statusChecker when adapter returns without playbackUrl", async () => {
 		let invokeStatusChange: (
 			status: "processing" | "ready" | "failed",
-			playbackUrl?: string,
-			statusDetail?: string,
+			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
 		) => void;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
@@ -489,12 +487,12 @@ describe("UploadProvider + useUpload", () => {
 		expect(result.current.files[0].status).toBe("processing");
 
 		act(() => {
-			invokeStatusChange?.("processing", undefined, "480p: pending");
+			invokeStatusChange?.("processing", { statusDetail: "480p: pending" });
 		});
 		expect(result.current.files[0].statusDetail).toBe("480p: pending");
 
 		act(() => {
-			invokeStatusChange?.("ready", "https://cdn.example.com/video.mp4");
+			invokeStatusChange?.("ready", { playbackUrl: "https://cdn.example.com/video.mp4" });
 		});
 		expect(result.current.files[0].status).toBe("ready");
 		expect(result.current.files[0].playbackUrl).toBe(
@@ -506,8 +504,7 @@ describe("UploadProvider + useUpload", () => {
 	it("transitions to failed when statusChecker reports failed", async () => {
 		let invokeStatusChange: (
 			status: "processing" | "ready" | "failed",
-			playbackUrl?: string,
-			statusDetail?: string,
+			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
 		) => void;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
@@ -946,7 +943,7 @@ describe("UploadProvider + useUpload", () => {
 	it("calls onFileReady when statusChecker transitions file to ready", async () => {
 		let invokeStatusChange: (
 			status: "processing" | "ready" | "failed",
-			playbackUrl?: string,
+			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
 		) => void;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
@@ -974,7 +971,7 @@ describe("UploadProvider + useUpload", () => {
 		expect(onFileReady).not.toHaveBeenCalled();
 
 		act(() => {
-			invokeStatusChange?.("ready", "https://cdn.example.com/video.mp4");
+			invokeStatusChange?.("ready", { playbackUrl: "https://cdn.example.com/video.mp4" });
 		});
 
 		expect(result.current.files[0].status).toBe("ready");
@@ -990,8 +987,7 @@ describe("UploadProvider + useUpload", () => {
 	it("clears statusDetail when file transitions to ready via statusChecker", async () => {
 		let invokeStatusChange: (
 			status: "processing" | "ready" | "failed",
-			playbackUrl?: string,
-			statusDetail?: string,
+			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
 		) => void;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
@@ -1014,12 +1010,12 @@ describe("UploadProvider + useUpload", () => {
 		});
 
 		act(() => {
-			invokeStatusChange?.("processing", undefined, "480p: transcoding");
+			invokeStatusChange?.("processing", { statusDetail: "480p: transcoding" });
 		});
 		expect(result.current.files[0].statusDetail).toBe("480p: transcoding");
 
 		act(() => {
-			invokeStatusChange?.("ready", "https://cdn.example.com/video.mp4");
+			invokeStatusChange?.("ready", { playbackUrl: "https://cdn.example.com/video.mp4" });
 		});
 		expect(result.current.files[0].statusDetail).toBeNull();
 	});
@@ -1027,8 +1023,7 @@ describe("UploadProvider + useUpload", () => {
 	it("clears statusDetail when file transitions to failed via statusChecker", async () => {
 		let invokeStatusChange: (
 			status: "processing" | "ready" | "failed",
-			playbackUrl?: string,
-			statusDetail?: string,
+			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
 		) => void;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
@@ -1051,7 +1046,7 @@ describe("UploadProvider + useUpload", () => {
 		});
 
 		act(() => {
-			invokeStatusChange?.("processing", undefined, "480p: transcoding");
+			invokeStatusChange?.("processing", { statusDetail: "480p: transcoding" });
 		});
 		expect(result.current.files[0].statusDetail).toBe("480p: transcoding");
 
@@ -1189,11 +1184,9 @@ describe("UploadProvider + useUpload", () => {
 		});
 		expect(result.current.files[0].status).toBe("processing");
 		act(() => {
-			result.current.updateFileStatus(
-				"video-123",
-				"ready",
-				"https://cdn.example.com/v.mp4",
-			);
+			result.current.updateFileStatus("video-123", "ready", {
+				playbackUrl: "https://cdn.example.com/v.mp4",
+			});
 		});
 		expect(result.current.files[0].status).toBe("ready");
 		expect(result.current.files[0].playbackUrl).toBe(
@@ -1263,8 +1256,7 @@ describe("UploadProvider + useUpload", () => {
 		let invokeStatusChange:
 			| ((
 					status: "processing" | "ready" | "failed",
-					playbackUrl?: string,
-					statusDetail?: string,
+					data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
 			  ) => void)
 			| undefined;
 		const statusChecker = createMockStatusChecker((invoke) => {
@@ -1281,15 +1273,13 @@ describe("UploadProvider + useUpload", () => {
 			await vi.advanceTimersByTimeAsync(0);
 		});
 		act(() => {
-			invokeStatusChange?.("processing", undefined, "480p: transcoding");
+			invokeStatusChange?.("processing", { statusDetail: "480p: transcoding" });
 		});
 		expect(result.current.files[0].statusDetail).toBe("480p: transcoding");
 		act(() => {
-			result.current.updateFileStatus(
-				"video-123",
-				"ready",
-				"https://cdn.example.com/v.mp4",
-			);
+			result.current.updateFileStatus("video-123", "ready", {
+				playbackUrl: "https://cdn.example.com/v.mp4",
+			});
 		});
 		expect(result.current.files[0].statusDetail).toBeNull();
 	});
