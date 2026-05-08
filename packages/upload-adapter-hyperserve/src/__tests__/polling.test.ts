@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { HyperserveStatusChecker, pollVideoStatus } from "../polling/index.js";
+import { HyperserveStatusChecker } from "../polling/index.js";
 
-describe("pollVideoStatus", () => {
+describe("HyperserveStatusChecker", () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
 	});
@@ -19,12 +19,14 @@ describe("pollVideoStatus", () => {
 			status: "ready",
 		});
 
-		pollVideoStatus({
+		const checker = new HyperserveStatusChecker({
 			getVideoStatus,
 			intervalMs: 1000,
+		});
+		checker.checkStatus({
+			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
-			videoId: "video-1",
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -40,12 +42,14 @@ describe("pollVideoStatus", () => {
 		const ac = new AbortController();
 		const getVideoStatus = vi.fn().mockResolvedValue({ status: "failed" });
 
-		pollVideoStatus({
+		const checker = new HyperserveStatusChecker({
 			getVideoStatus,
 			intervalMs: 1000,
+		});
+		checker.checkStatus({
+			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
-			videoId: "video-1",
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -64,12 +68,14 @@ describe("pollVideoStatus", () => {
 				status: "ready",
 			});
 
-		pollVideoStatus({
+		const checker = new HyperserveStatusChecker({
 			getVideoStatus,
 			intervalMs: 2000,
+		});
+		checker.checkStatus({
+			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
-			videoId: "video-1",
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -89,12 +95,14 @@ describe("pollVideoStatus", () => {
 		const ac = new AbortController();
 		const getVideoStatus = vi.fn().mockResolvedValue({ status: "processing" });
 
-		pollVideoStatus({
+		const checker = new HyperserveStatusChecker({
 			getVideoStatus,
 			intervalMs: 1000,
+		});
+		checker.checkStatus({
+			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
-			videoId: "video-1",
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -116,12 +124,14 @@ describe("pollVideoStatus", () => {
 				status: "ready",
 			});
 
-		pollVideoStatus({
+		const checker = new HyperserveStatusChecker({
 			getVideoStatus,
 			intervalMs: 1000,
+		});
+		checker.checkStatus({
+			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
-			videoId: "video-1",
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -152,12 +162,14 @@ describe("pollVideoStatus", () => {
 				status: "ready",
 			});
 
-		pollVideoStatus({
+		const checker = new HyperserveStatusChecker({
 			getVideoStatus,
 			intervalMs: 1000,
+		});
+		checker.checkStatus({
+			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
-			videoId: "video-1",
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -189,12 +201,14 @@ describe("pollVideoStatus", () => {
 				status: "ready",
 			});
 
-		pollVideoStatus({
+		const checker = new HyperserveStatusChecker({
 			getVideoStatus,
 			intervalMs: 1000,
+		});
+		checker.checkStatus({
+			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
-			videoId: "video-1",
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -228,12 +242,14 @@ describe("pollVideoStatus", () => {
 				status: "ready",
 			});
 
-		pollVideoStatus({
+		const checker = new HyperserveStatusChecker({
 			getVideoStatus,
 			intervalMs: 1000,
+		});
+		checker.checkStatus({
+			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
-			videoId: "video-1",
 		});
 
 		await vi.advanceTimersByTimeAsync(0); // 1st
@@ -259,12 +275,14 @@ describe("pollVideoStatus", () => {
 			statusDetail: "480p: transcoding, 1080p: pending",
 		});
 
-		pollVideoStatus({
+		const checker = new HyperserveStatusChecker({
 			getVideoStatus,
 			intervalMs: 1000,
+		});
+		checker.checkStatus({
+			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
-			videoId: "video-1",
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -283,12 +301,14 @@ describe("pollVideoStatus", () => {
 			status: "ready",
 		});
 
-		pollVideoStatus({
+		const checker = new HyperserveStatusChecker({
 			getVideoStatus,
 			intervalMs: 1000,
+		});
+		checker.checkStatus({
+			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
-			videoId: "video-1",
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -297,17 +317,6 @@ describe("pollVideoStatus", () => {
 			playbackUrl: "https://cdn.example.com/video.mp4",
 			thumbnailUri: "https://cdn.example.com/poster.jpg",
 		});
-	});
-});
-
-describe("HyperserveStatusChecker", () => {
-	beforeEach(() => {
-		vi.useFakeTimers();
-	});
-
-	afterEach(() => {
-		vi.useRealTimers();
-		vi.restoreAllMocks();
 	});
 
 	it("calls getVideoStatus with videoId from uploadResult", async () => {

@@ -1,57 +1,11 @@
 import type {
-	ProcessingStatus,
 	StatusChecker,
 	StatusUpdateData,
 	UploadResult,
 } from "@hyperserve/video-uploader";
+import type { ProcessingStatus } from "@hyperserve/video-uploader";
 import type { VideoStatusResult } from "../types.js";
 import { backoffDelay } from "./backoff.js";
-
-type PollOptions = {
-	getVideoStatus: (videoId: string) => Promise<VideoStatusResult>;
-	intervalMs: number;
-	onStatusChange: (status: ProcessingStatus, data?: StatusUpdateData) => void;
-	signal: AbortSignal;
-	videoId: string;
-};
-
-export function pollVideoStatus(options: PollOptions): void {
-	const { getVideoStatus, intervalMs, onStatusChange, signal, videoId } =
-		options;
-
-	let consecutiveErrors = 0;
-
-	const poll = async () => {
-		if (signal.aborted) return;
-
-		try {
-			const result = await getVideoStatus(videoId);
-			consecutiveErrors = 0;
-
-			if (result.status === "ready") {
-				onStatusChange("ready", {
-					playbackUrl: result.playbackUrl,
-					thumbnailUri: result.thumbnailUri,
-				});
-				return;
-			}
-
-			if (result.status === "failed") {
-				onStatusChange("failed");
-				return;
-			}
-
-			onStatusChange("processing", { statusDetail: result.statusDetail });
-			setTimeout(poll, intervalMs);
-		} catch (_error) {
-			if (signal.aborted) return;
-			consecutiveErrors += 1;
-			setTimeout(poll, backoffDelay(intervalMs, consecutiveErrors));
-		}
-	};
-
-	poll();
-}
 
 export class HyperserveStatusChecker implements StatusChecker {
 	private getVideoStatus: (videoId: string) => Promise<VideoStatusResult>;
@@ -70,12 +24,37 @@ export class HyperserveStatusChecker implements StatusChecker {
 		onStatusChange: (status: ProcessingStatus, data?: StatusUpdateData) => void;
 		signal: AbortSignal;
 	}): void {
-		pollVideoStatus({
-			getVideoStatus: this.getVideoStatus,
-			intervalMs: this.intervalMs,
-			onStatusChange: options.onStatusChange,
-			signal: options.signal,
-			videoId: options.uploadResult.videoId,
-		});
+		const { uploadResult, onStatusChange, signal } = options;
+		const { videoId } = uploadResult;
+		const { getVideoStatus, intervalMs } = this;
+		let consecutiveErrors = 0;
+
+		const poll = async () => {
+			if (signal.aborted) return;
+			try {
+				const result = await getVideoStatus(videoId);
+				consecutiveErrors = 0;
+
+				if (result.status === "ready") {
+					onStatusChange("ready", {
+						playbackUrl: result.playbackUrl,
+						thumbnailUri: result.thumbnailUri,
+					});
+					return;
+				}
+				if (result.status === "failed") {
+					onStatusChange("failed");
+					return;
+				}
+				onStatusChange("processing", { statusDetail: result.statusDetail });
+				setTimeout(poll, intervalMs);
+			} catch (_error) {
+				if (signal.aborted) return;
+				consecutiveErrors += 1;
+				setTimeout(poll, backoffDelay(intervalMs, consecutiveErrors));
+			}
+		};
+
+		poll();
 	}
 }
