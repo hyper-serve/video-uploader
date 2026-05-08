@@ -217,13 +217,6 @@ export function UploadProvider<TOptions>({
 								return;
 							}
 
-							if (status === "ready") {
-								const thumbnailUri = thumbnailUrisRef.current.get(file.id);
-								if (thumbnailUri) {
-									revokeThumbnail(thumbnailUri);
-									thumbnailUrisRef.current.delete(file.id);
-								}
-							}
 							dispatchWithStatusTracking({
 								id: file.id,
 								type: "UPDATE_FILE",
@@ -233,10 +226,14 @@ export function UploadProvider<TOptions>({
 											? (cfg.errorMessages?.processingFailed ??
 												"Processing failed")
 											: null,
-									playbackUrl: data?.playbackUrl ?? null,
+									...(data?.playbackUrl !== undefined && {
+										playbackUrl: data.playbackUrl,
+									}),
+									...(data?.thumbnailUri !== undefined && {
+										thumbnailUri: data.thumbnailUri,
+									}),
 									status: status === "ready" ? "ready" : "failed",
 									statusDetail: null,
-									...(status === "ready" && { thumbnailUri: null }),
 								},
 							});
 							abortControllers.current.delete(file.id);
@@ -390,14 +387,6 @@ export function UploadProvider<TOptions>({
 			);
 			if (!file) return;
 
-			if (status === "ready") {
-				const thumbnailUri = thumbnailUrisRef.current.get(file.id);
-				if (thumbnailUri) {
-					revokeThumbnail(thumbnailUri);
-					thumbnailUrisRef.current.delete(file.id);
-				}
-			}
-
 			dispatchWithStatusTracking({
 				id: file.id,
 				type: "UPDATE_FILE",
@@ -407,10 +396,10 @@ export function UploadProvider<TOptions>({
 							? (configRef.current.errorMessages?.processingFailed ??
 								"Processing failed")
 							: null,
-					playbackUrl: data?.playbackUrl ?? null,
+					...(data?.playbackUrl !== undefined && { playbackUrl: data.playbackUrl }),
+					...(data?.thumbnailUri !== undefined && { thumbnailUri: data.thumbnailUri }),
 					status,
 					statusDetail: null,
-					...(status === "ready" && { thumbnailUri: null }),
 				},
 			});
 		},

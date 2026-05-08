@@ -1251,6 +1251,68 @@ describe("UploadProvider + useUpload", () => {
 		expect(result.current.files[0].status).toBe("ready");
 	});
 
+	it("preserves thumbnailUri on ready transition (no force-clear)", async () => {
+		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce("blob:thumb-keep");
+		const adapter = createMockAdapter();
+		const { result } = renderHook(() => useUpload(), {
+			wrapper: makeWrapper(makeConfig({ adapter })),
+		});
+		act(() => { result.current.addFiles([makeFileRef("v.mp4", true)]); });
+		await act(async () => { await vi.advanceTimersByTimeAsync(0); });
+		expect(result.current.files[0].thumbnailUri).toBe("blob:thumb-keep");
+
+		act(() => {
+			result.current.updateFileStatus("video-123", "ready", {
+				playbackUrl: "https://cdn.example.com/v.mp4",
+			});
+		});
+
+		expect(result.current.files[0].status).toBe("ready");
+		expect(result.current.files[0].thumbnailUri).toBe("blob:thumb-keep");
+		expect(revokeThumbnail).not.toHaveBeenCalledWith("blob:thumb-keep");
+	});
+
+	it("ready without playbackUrl preserves thumbnailUri (no placeholder fallthrough)", async () => {
+		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce("blob:thumb-no-url");
+		const adapter = createMockAdapter();
+		const { result } = renderHook(() => useUpload(), {
+			wrapper: makeWrapper(makeConfig({ adapter })),
+		});
+		act(() => { result.current.addFiles([makeFileRef("v.mp4", true)]); });
+		await act(async () => { await vi.advanceTimersByTimeAsync(0); });
+
+		act(() => {
+			result.current.updateFileStatus("video-123", "ready");
+		});
+
+		expect(result.current.files[0].status).toBe("ready");
+		expect(result.current.files[0].playbackUrl).toBeNull();
+		expect(result.current.files[0].thumbnailUri).toBe("blob:thumb-no-url");
+	});
+
+	it("revokes local thumbnail blob URL on unmount when file is in ready state", async () => {
+		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce("blob:thumb-unmount-after-ready");
+		const adapter = createMockAdapter();
+		const { result, unmount } = renderHook(() => useUpload(), {
+			wrapper: makeWrapper(makeConfig({ adapter })),
+		});
+		act(() => { result.current.addFiles([makeFileRef("v.mp4", true)]); });
+		await act(async () => { await vi.advanceTimersByTimeAsync(0); });
+
+		act(() => {
+			result.current.updateFileStatus("video-123", "ready", {
+				playbackUrl: "https://cdn.example.com/v.mp4",
+			});
+		});
+		expect(result.current.files[0].status).toBe("ready");
+		expect(result.current.files[0].thumbnailUri).toBe("blob:thumb-unmount-after-ready");
+		expect(revokeThumbnail).not.toHaveBeenCalledWith("blob:thumb-unmount-after-ready");
+
+		unmount();
+
+		expect(revokeThumbnail).toHaveBeenCalledWith("blob:thumb-unmount-after-ready");
+	});
+
 	it("updateFileStatus clears statusDetail on terminal transition", async () => {
 		let invokeStatusChange:
 			| ((status: ProcessingStatus, data?: StatusUpdateData) => void)
