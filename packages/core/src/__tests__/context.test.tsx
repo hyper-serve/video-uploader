@@ -1276,6 +1276,33 @@ describe("UploadProvider + useUpload", () => {
 		expect(revokeThumbnail).toHaveBeenCalledWith("blob:thumb-replace");
 	});
 
+	it("revokes prior local thumbnail blob when status checker provides a replacement thumbnailUri", async () => {
+		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce("blob:thumb-checker-replace");
+		let invokeStatusChange:
+			| ((status: "processing" | "ready" | "failed", data?: StatusUpdateData) => void)
+			| undefined;
+		const statusChecker = createMockStatusChecker((invoke) => {
+			invokeStatusChange = invoke;
+		});
+		const adapter = createMockAdapter({ videoId: "video-123" });
+		const { result } = renderHook(() => useUpload(), {
+			wrapper: makeWrapper(makeConfig({ adapter, statusChecker })),
+		});
+		act(() => { result.current.addFiles([makeFileRef("v.mp4", true)]); });
+		await act(async () => { await vi.advanceTimersByTimeAsync(0); });
+		expect(result.current.files[0].thumbnailUri).toBe("blob:thumb-checker-replace");
+
+		act(() => {
+			invokeStatusChange?.("ready", {
+				playbackUrl: "https://cdn.example.com/v.mp4",
+				thumbnailUri: "https://cdn.example.com/poster.jpg",
+			});
+		});
+
+		expect(result.current.files[0].thumbnailUri).toBe("https://cdn.example.com/poster.jpg");
+		expect(revokeThumbnail).toHaveBeenCalledWith("blob:thumb-checker-replace");
+	});
+
 	it("ignores 'failed' on already-ready file (terminal mismatch)", async () => {
 		const adapter = createMockAdapter({
 			playbackUrl: "https://cdn.example.com/v.mp4",

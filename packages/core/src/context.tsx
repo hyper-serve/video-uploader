@@ -35,6 +35,13 @@ type FileAction =
 	| { id: string; type: "RETRY_FILE" }
 	| { id: string; type: "UPDATE_FILE"; updates: Partial<FileState> };
 
+function statusDataPatch(data?: StatusUpdateData) {
+	return {
+		...(data?.playbackUrl !== undefined && { playbackUrl: data.playbackUrl }),
+		...(data?.thumbnailUri !== undefined && { thumbnailUri: data.thumbnailUri }),
+	};
+}
+
 function fileReducer(state: FileState[], action: FileAction): FileState[] {
 	switch (action.type) {
 		case "ADD_FILES":
@@ -94,6 +101,18 @@ export function UploadProvider<TOptions>({
 	const abortControllers = useRef(new Map<string, AbortController>());
 	const processingIds = useRef(new Set<string>());
 	const thumbnailUrisRef = useRef(new Map<string, string>());
+
+	const replaceLocalThumbnailIfReplaced = useCallback(
+		(fileId: string, nextThumbnailUri: string | undefined) => {
+			if (nextThumbnailUri === undefined) return;
+			const localBlob = thumbnailUrisRef.current.get(fileId);
+			if (localBlob && localBlob !== nextThumbnailUri) {
+				revokeThumbnail(localBlob);
+				thumbnailUrisRef.current.delete(fileId);
+			}
+		},
+		[],
+	);
 
 	const dispatchWithStatusTracking = useCallback(
 		(action: FileAction) => {
@@ -211,6 +230,7 @@ export function UploadProvider<TOptions>({
 								return;
 							}
 
+							replaceLocalThumbnailIfReplaced(file.id, data?.thumbnailUri);
 							dispatchWithStatusTracking({
 								id: file.id,
 								type: "UPDATE_FILE",
@@ -220,12 +240,7 @@ export function UploadProvider<TOptions>({
 											? (cfg.errorMessages?.processingFailed ??
 												"Processing failed")
 											: null,
-									...(data?.playbackUrl !== undefined && {
-										playbackUrl: data.playbackUrl,
-									}),
-									...(data?.thumbnailUri !== undefined && {
-										thumbnailUri: data.thumbnailUri,
-									}),
+									...statusDataPatch(data),
 									status: status === "ready" ? "ready" : "failed",
 									statusDetail: null,
 								},
@@ -261,7 +276,7 @@ export function UploadProvider<TOptions>({
 				bumpScheduler();
 			}
 		},
-		[bumpScheduler, dispatchWithStatusTracking],
+		[bumpScheduler, dispatchWithStatusTracking, replaceLocalThumbnailIfReplaced],
 	);
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -386,14 +401,7 @@ export function UploadProvider<TOptions>({
 			// "ready" on a ready file patches data without changing status.
 			const isPatchOnly = file.status === "ready" && status === "ready";
 
-			// If caller provides a replacement thumbnailUri, revoke any prior local blob.
-			if (data?.thumbnailUri !== undefined) {
-				const localBlob = thumbnailUrisRef.current.get(file.id);
-				if (localBlob && localBlob !== data.thumbnailUri) {
-					revokeThumbnail(localBlob);
-					thumbnailUrisRef.current.delete(file.id);
-				}
-			}
+			replaceLocalThumbnailIfReplaced(file.id, data?.thumbnailUri);
 
 			dispatchWithStatusTracking({
 				id: file.id,
@@ -408,12 +416,11 @@ export function UploadProvider<TOptions>({
 						status,
 						statusDetail: null,
 					}),
-					...(data?.playbackUrl !== undefined && { playbackUrl: data.playbackUrl }),
-					...(data?.thumbnailUri !== undefined && { thumbnailUri: data.thumbnailUri }),
+					...statusDataPatch(data),
 				},
 			});
 		},
-		[dispatchWithStatusTracking],
+		[dispatchWithStatusTracking, replaceLocalThumbnailIfReplaced],
 	);
 
 	const maxFiles = configRef.current.maxFiles;
