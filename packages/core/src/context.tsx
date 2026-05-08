@@ -376,24 +376,40 @@ export function UploadProvider<TOptions>({
 
 	const updateFileStatus = useCallback(
 		(videoId: string, status: "ready" | "failed", data?: StatusUpdateData) => {
-			const file = filesRef.current.find(
-				(f) => f.videoId === videoId && f.status === "processing",
-			);
+			const file = filesRef.current.find((f) => f.videoId === videoId);
 			if (!file) return;
+
+			// Status transitions are only allowed from "processing".
+			// "failed" on an already-ready file is a terminal mismatch: ignore.
+			if (file.status !== "processing" && status === "failed") return;
+
+			// "ready" on a ready file patches data without changing status.
+			const isPatchOnly = file.status === "ready" && status === "ready";
+
+			// If caller provides a replacement thumbnailUri, revoke any prior local blob.
+			if (data?.thumbnailUri !== undefined) {
+				const localBlob = thumbnailUrisRef.current.get(file.id);
+				if (localBlob && localBlob !== data.thumbnailUri) {
+					revokeThumbnail(localBlob);
+					thumbnailUrisRef.current.delete(file.id);
+				}
+			}
 
 			dispatchWithStatusTracking({
 				id: file.id,
 				type: "UPDATE_FILE",
 				updates: {
-					error:
-						status === "failed"
-							? (configRef.current.errorMessages?.processingFailed ??
-								"Processing failed")
-							: null,
+					...(!isPatchOnly && {
+						error:
+							status === "failed"
+								? (configRef.current.errorMessages?.processingFailed ??
+									"Processing failed")
+								: null,
+						status,
+						statusDetail: null,
+					}),
 					...(data?.playbackUrl !== undefined && { playbackUrl: data.playbackUrl }),
 					...(data?.thumbnailUri !== undefined && { thumbnailUri: data.thumbnailUri }),
-					status,
-					statusDetail: null,
 				},
 			});
 		},
