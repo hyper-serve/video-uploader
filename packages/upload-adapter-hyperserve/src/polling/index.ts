@@ -1,6 +1,7 @@
 import type {
 	ProcessingStatus,
 	StatusChecker,
+	StatusUpdateData,
 	UploadResult,
 } from "@hyperserve/video-uploader";
 import type { VideoStatusResult } from "../types.js";
@@ -9,10 +10,7 @@ import { backoffDelay } from "./backoff.js";
 type PollOptions = {
 	getVideoStatus: (videoId: string) => Promise<VideoStatusResult>;
 	intervalMs: number;
-	onStatusChange: (
-		status: ProcessingStatus,
-		data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
-	) => void;
+	onStatusChange: (status: ProcessingStatus, data?: StatusUpdateData) => void;
 	signal: AbortSignal;
 	videoId: string;
 };
@@ -66,10 +64,7 @@ export class HyperserveStatusChecker implements StatusChecker {
 
 	checkStatus(options: {
 		uploadResult: UploadResult;
-		onStatusChange: (
-			status: ProcessingStatus,
-			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
-		) => void;
+		onStatusChange: (status: ProcessingStatus, data?: StatusUpdateData) => void;
 		signal: AbortSignal;
 	}): void {
 		pollVideoStatus({

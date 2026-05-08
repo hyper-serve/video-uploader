@@ -21,6 +21,7 @@ export type {
 	NativeFileRef,
 	ProcessingStatus,
 	StatusChecker,
+	StatusUpdateData,
 	UploadAdapter,
 	UploadConfig,
 	UploadContextValue,

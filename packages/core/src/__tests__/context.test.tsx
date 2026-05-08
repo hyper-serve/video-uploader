@@ -6,7 +6,9 @@ import { useUpload } from "../hooks/useUpload.js";
 import { createThumbnail, revokeThumbnail } from "../platform/thumbnail.js";
 import type {
 	FileRef,
+	ProcessingStatus,
 	StatusChecker,
+	StatusUpdateData,
 	UploadAdapter,
 	UploadConfig,
 	UploadResult,
@@ -61,10 +63,7 @@ function createMockAdapter(
 
 function createMockStatusChecker(
 	onCheckStatus?: (
-		invoke: (
-			status: "processing" | "ready" | "failed",
-			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
-		) => void,
+		invoke: (status: ProcessingStatus, data?: StatusUpdateData) => void,
 	) => void,
 ): StatusChecker {
 	return {
@@ -459,8 +458,8 @@ describe("UploadProvider + useUpload", () => {
 
 	it("runs statusChecker when adapter returns without playbackUrl", async () => {
 		let invokeStatusChange: (
-			status: "processing" | "ready" | "failed",
-			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
+			status: ProcessingStatus,
+			data?: StatusUpdateData,
 		) => void;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
@@ -503,8 +502,8 @@ describe("UploadProvider + useUpload", () => {
 
 	it("transitions to failed when statusChecker reports failed", async () => {
 		let invokeStatusChange: (
-			status: "processing" | "ready" | "failed",
-			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
+			status: ProcessingStatus,
+			data?: StatusUpdateData,
 		) => void;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
@@ -788,7 +787,7 @@ describe("UploadProvider + useUpload", () => {
 	});
 
 	it("uses custom errorMessages.processingFailed when statusChecker reports failed", async () => {
-		let invokeStatusChange: (status: "processing" | "ready" | "failed") => void;
+		let invokeStatusChange: (status: ProcessingStatus) => void;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
 		});
@@ -942,8 +941,8 @@ describe("UploadProvider + useUpload", () => {
 
 	it("calls onFileReady when statusChecker transitions file to ready", async () => {
 		let invokeStatusChange: (
-			status: "processing" | "ready" | "failed",
-			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
+			status: ProcessingStatus,
+			data?: StatusUpdateData,
 		) => void;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
@@ -986,8 +985,8 @@ describe("UploadProvider + useUpload", () => {
 
 	it("clears statusDetail when file transitions to ready via statusChecker", async () => {
 		let invokeStatusChange: (
-			status: "processing" | "ready" | "failed",
-			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
+			status: ProcessingStatus,
+			data?: StatusUpdateData,
 		) => void;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
@@ -1022,8 +1021,8 @@ describe("UploadProvider + useUpload", () => {
 
 	it("clears statusDetail when file transitions to failed via statusChecker", async () => {
 		let invokeStatusChange: (
-			status: "processing" | "ready" | "failed",
-			data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
+			status: ProcessingStatus,
+			data?: StatusUpdateData,
 		) => void;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
@@ -1254,10 +1253,7 @@ describe("UploadProvider + useUpload", () => {
 
 	it("updateFileStatus clears statusDetail on terminal transition", async () => {
 		let invokeStatusChange:
-			| ((
-					status: "processing" | "ready" | "failed",
-					data?: { playbackUrl?: string; thumbnailUri?: string; statusDetail?: string },
-			  ) => void)
+			| ((status: ProcessingStatus, data?: StatusUpdateData) => void)
 			| undefined;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
