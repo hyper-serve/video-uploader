@@ -273,6 +273,31 @@ describe("pollVideoStatus", () => {
 			statusDetail: "480p: transcoding, 1080p: pending",
 		});
 	});
+
+	it("forwards thumbnailUri from VideoStatusResult to onStatusChange", async () => {
+		const onStatusChange = vi.fn();
+		const ac = new AbortController();
+		const getVideoStatus = vi.fn().mockResolvedValue({
+			playbackUrl: "https://cdn.example.com/video.mp4",
+			thumbnailUri: "https://cdn.example.com/poster.jpg",
+			status: "ready",
+		});
+
+		pollVideoStatus({
+			getVideoStatus,
+			intervalMs: 1000,
+			onStatusChange,
+			signal: ac.signal,
+			videoId: "video-1",
+		});
+
+		await vi.advanceTimersByTimeAsync(0);
+
+		expect(onStatusChange).toHaveBeenCalledWith("ready", {
+			playbackUrl: "https://cdn.example.com/video.mp4",
+			thumbnailUri: "https://cdn.example.com/poster.jpg",
+		});
+	});
 });
 
 describe("HyperserveStatusChecker", () => {

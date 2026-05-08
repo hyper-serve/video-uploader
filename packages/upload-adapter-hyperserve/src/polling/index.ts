@@ -29,7 +29,10 @@ export function pollVideoStatus(options: PollOptions): void {
 			consecutiveErrors = 0;
 
 			if (result.status === "ready") {
-				onStatusChange("ready", { playbackUrl: result.playbackUrl });
+				onStatusChange("ready", {
+					playbackUrl: result.playbackUrl,
+					thumbnailUri: result.thumbnailUri,
+				});
 				return;
 			}
 

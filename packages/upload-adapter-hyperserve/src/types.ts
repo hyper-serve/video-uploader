@@ -18,5 +18,6 @@ export type HyperserveAdapterConfig = {
 export type VideoStatusResult = {
 	status: ProcessingStatus;
 	playbackUrl?: string;
+	thumbnailUri?: string;
 	statusDetail?: string;
 };
