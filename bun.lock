@@ -56,7 +56,7 @@
     },
     "packages/core": {
       "name": "@hyperserve/video-uploader",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "devDependencies": {
         "@testing-library/react": "16.3.2",
         "@types/node": "22.15.0",
@@ -111,7 +111,7 @@
         "vitest": "4.0.18",
       },
       "peerDependencies": {
-        "@hyperserve/video-uploader": ">=0.1.0",
+        "@hyperserve/video-uploader": "workspace:^",
         "react": ">=18.0.0",
         "react-dom": ">=18.0.0",
       },
@@ -133,24 +133,25 @@
         "typescript": "5.9.3",
       },
       "peerDependencies": {
-        "@hyperserve/video-uploader": ">=0.1.0",
+        "@hyperserve/video-uploader": "workspace:^",
         "react": ">=18.0.0",
         "react-native": ">=0.73.0",
       },
     },
     "packages/upload-adapter-hyperserve": {
       "name": "@hyperserve/video-uploader-adapter-hyperserve",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "dependencies": {
         "@hyperserve/hyperserve-js": "^0.1.0",
-        "@hyperserve/video-uploader": "workspace:*",
       },
       "devDependencies": {
+        "@hyperserve/video-uploader": "workspace:*",
         "@types/node": "22.15.0",
         "typescript": "5.9.3",
         "vitest": "4.0.18",
       },
       "peerDependencies": {
+        "@hyperserve/video-uploader": "workspace:^",
         "react-native-background-upload": ">=6.0.0",
       },
       "optionalPeers": [

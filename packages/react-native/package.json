@@ -36,7 +36,7 @@
 		"prepublishOnly": "bun run build"
 	},
 	"peerDependencies": {
-		"@hyperserve/video-uploader": ">=0.1.0",
+		"@hyperserve/video-uploader": "workspace:^",
 		"react": ">=18.0.0",
 		"react-native": ">=0.73.0"
 	},
