@@ -3,8 +3,7 @@ import { hyperserve } from "../../../lib/hyperserve";
 
 export async function POST(req: Request) {
 	try {
-		const { filename, fileSizeBytes, resolutions, isPublic } =
-			await req.json();
+		const { filename, fileSizeBytes, resolutions, isPublic } = await req.json();
 
 		const result = await hyperserve.createVideo({
 			filename,
