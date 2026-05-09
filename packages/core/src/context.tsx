@@ -38,7 +38,9 @@ type FileAction =
 function statusDataPatch(data?: StatusUpdateData) {
 	return {
 		...(data?.playbackUrl !== undefined && { playbackUrl: data.playbackUrl }),
-		...(data?.thumbnailUri !== undefined && { thumbnailUri: data.thumbnailUri }),
+		...(data?.thumbnailUri !== undefined && {
+			thumbnailUri: data.thumbnailUri,
+		}),
 	};
 }
 
@@ -276,7 +278,11 @@ export function UploadProvider<TOptions>({
 				bumpScheduler();
 			}
 		},
-		[bumpScheduler, dispatchWithStatusTracking, replaceLocalThumbnailIfReplaced],
+		[
+			bumpScheduler,
+			dispatchWithStatusTracking,
+			replaceLocalThumbnailIfReplaced,
+		],
 	);
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps

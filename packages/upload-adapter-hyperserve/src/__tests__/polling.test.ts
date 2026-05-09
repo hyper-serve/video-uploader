@@ -24,9 +24,9 @@ describe("HyperserveStatusChecker", () => {
 			intervalMs: 1000,
 		});
 		checker.checkStatus({
-			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
+			uploadResult: { videoId: "video-1" },
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -47,9 +47,9 @@ describe("HyperserveStatusChecker", () => {
 			intervalMs: 1000,
 		});
 		checker.checkStatus({
-			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
+			uploadResult: { videoId: "video-1" },
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -73,9 +73,9 @@ describe("HyperserveStatusChecker", () => {
 			intervalMs: 2000,
 		});
 		checker.checkStatus({
-			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
+			uploadResult: { videoId: "video-1" },
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -100,9 +100,9 @@ describe("HyperserveStatusChecker", () => {
 			intervalMs: 1000,
 		});
 		checker.checkStatus({
-			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
+			uploadResult: { videoId: "video-1" },
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -129,9 +129,9 @@ describe("HyperserveStatusChecker", () => {
 			intervalMs: 1000,
 		});
 		checker.checkStatus({
-			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
+			uploadResult: { videoId: "video-1" },
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -167,9 +167,9 @@ describe("HyperserveStatusChecker", () => {
 			intervalMs: 1000,
 		});
 		checker.checkStatus({
-			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
+			uploadResult: { videoId: "video-1" },
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -206,9 +206,9 @@ describe("HyperserveStatusChecker", () => {
 			intervalMs: 1000,
 		});
 		checker.checkStatus({
-			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
+			uploadResult: { videoId: "video-1" },
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -247,9 +247,9 @@ describe("HyperserveStatusChecker", () => {
 			intervalMs: 1000,
 		});
 		checker.checkStatus({
-			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
+			uploadResult: { videoId: "video-1" },
 		});
 
 		await vi.advanceTimersByTimeAsync(0); // 1st
@@ -280,9 +280,9 @@ describe("HyperserveStatusChecker", () => {
 			intervalMs: 1000,
 		});
 		checker.checkStatus({
-			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
+			uploadResult: { videoId: "video-1" },
 		});
 
 		await vi.advanceTimersByTimeAsync(0);
@@ -297,8 +297,8 @@ describe("HyperserveStatusChecker", () => {
 		const ac = new AbortController();
 		const getVideoStatus = vi.fn().mockResolvedValue({
 			playbackUrl: "https://cdn.example.com/video.mp4",
-			thumbnailUri: "https://cdn.example.com/poster.jpg",
 			status: "ready",
+			thumbnailUri: "https://cdn.example.com/poster.jpg",
 		});
 
 		const checker = new HyperserveStatusChecker({
@@ -306,9 +306,9 @@ describe("HyperserveStatusChecker", () => {
 			intervalMs: 1000,
 		});
 		checker.checkStatus({
-			uploadResult: { videoId: "video-1" },
 			onStatusChange,
 			signal: ac.signal,
+			uploadResult: { videoId: "video-1" },
 		});
 
 		await vi.advanceTimersByTimeAsync(0);

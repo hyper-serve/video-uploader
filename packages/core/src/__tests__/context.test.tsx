@@ -491,7 +491,9 @@ describe("UploadProvider + useUpload", () => {
 		expect(result.current.files[0].statusDetail).toBe("480p: pending");
 
 		act(() => {
-			invokeStatusChange?.("ready", { playbackUrl: "https://cdn.example.com/video.mp4" });
+			invokeStatusChange?.("ready", {
+				playbackUrl: "https://cdn.example.com/video.mp4",
+			});
 		});
 		expect(result.current.files[0].status).toBe("ready");
 		expect(result.current.files[0].playbackUrl).toBe(
@@ -973,7 +975,9 @@ describe("UploadProvider + useUpload", () => {
 		expect(onFileReady).not.toHaveBeenCalled();
 
 		act(() => {
-			invokeStatusChange?.("ready", { playbackUrl: "https://cdn.example.com/video.mp4" });
+			invokeStatusChange?.("ready", {
+				playbackUrl: "https://cdn.example.com/video.mp4",
+			});
 		});
 
 		expect(result.current.files[0].status).toBe("ready");
@@ -1017,7 +1021,9 @@ describe("UploadProvider + useUpload", () => {
 		expect(result.current.files[0].statusDetail).toBe("480p: transcoding");
 
 		act(() => {
-			invokeStatusChange?.("ready", { playbackUrl: "https://cdn.example.com/video.mp4" });
+			invokeStatusChange?.("ready", {
+				playbackUrl: "https://cdn.example.com/video.mp4",
+			});
 		});
 		expect(result.current.files[0].statusDetail).toBeNull();
 	});
@@ -1238,10 +1244,16 @@ describe("UploadProvider + useUpload", () => {
 		const { result } = renderHook(() => useUpload(), {
 			wrapper: makeWrapper(makeConfig({ adapter })),
 		});
-		act(() => { result.current.addFiles([makeFileRef()]); });
-		await act(async () => { await vi.advanceTimersByTimeAsync(0); });
+		act(() => {
+			result.current.addFiles([makeFileRef()]);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
 
-		act(() => { result.current.updateFileStatus("video-123", "ready"); });
+		act(() => {
+			result.current.updateFileStatus("video-123", "ready");
+		});
 		expect(result.current.files[0].playbackUrl).toBeNull();
 
 		act(() => {
@@ -1251,19 +1263,29 @@ describe("UploadProvider + useUpload", () => {
 		});
 
 		expect(result.current.files[0].status).toBe("ready");
-		expect(result.current.files[0].playbackUrl).toBe("https://cdn.example.com/v.mp4");
+		expect(result.current.files[0].playbackUrl).toBe(
+			"https://cdn.example.com/v.mp4",
+		);
 	});
 
 	it("patches thumbnailUri on already-ready file and revokes prior local blob", async () => {
-		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce("blob:thumb-replace");
+		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+			"blob:thumb-replace",
+		);
 		const adapter = createMockAdapter();
 		const { result } = renderHook(() => useUpload(), {
 			wrapper: makeWrapper(makeConfig({ adapter })),
 		});
-		act(() => { result.current.addFiles([makeFileRef("v.mp4", true)]); });
-		await act(async () => { await vi.advanceTimersByTimeAsync(0); });
+		act(() => {
+			result.current.addFiles([makeFileRef("v.mp4", true)]);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
 
-		act(() => { result.current.updateFileStatus("video-123", "ready"); });
+		act(() => {
+			result.current.updateFileStatus("video-123", "ready");
+		});
 		expect(result.current.files[0].thumbnailUri).toBe("blob:thumb-replace");
 
 		act(() => {
@@ -1272,14 +1294,21 @@ describe("UploadProvider + useUpload", () => {
 			});
 		});
 
-		expect(result.current.files[0].thumbnailUri).toBe("https://cdn.example.com/poster.jpg");
+		expect(result.current.files[0].thumbnailUri).toBe(
+			"https://cdn.example.com/poster.jpg",
+		);
 		expect(revokeThumbnail).toHaveBeenCalledWith("blob:thumb-replace");
 	});
 
 	it("revokes prior local thumbnail blob when status checker provides a replacement thumbnailUri", async () => {
-		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce("blob:thumb-checker-replace");
+		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+			"blob:thumb-checker-replace",
+		);
 		let invokeStatusChange:
-			| ((status: "processing" | "ready" | "failed", data?: StatusUpdateData) => void)
+			| ((
+					status: "processing" | "ready" | "failed",
+					data?: StatusUpdateData,
+			  ) => void)
 			| undefined;
 		const statusChecker = createMockStatusChecker((invoke) => {
 			invokeStatusChange = invoke;
@@ -1288,9 +1317,15 @@ describe("UploadProvider + useUpload", () => {
 		const { result } = renderHook(() => useUpload(), {
 			wrapper: makeWrapper(makeConfig({ adapter, statusChecker })),
 		});
-		act(() => { result.current.addFiles([makeFileRef("v.mp4", true)]); });
-		await act(async () => { await vi.advanceTimersByTimeAsync(0); });
-		expect(result.current.files[0].thumbnailUri).toBe("blob:thumb-checker-replace");
+		act(() => {
+			result.current.addFiles([makeFileRef("v.mp4", true)]);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
+		expect(result.current.files[0].thumbnailUri).toBe(
+			"blob:thumb-checker-replace",
+		);
 
 		act(() => {
 			invokeStatusChange?.("ready", {
@@ -1299,7 +1334,9 @@ describe("UploadProvider + useUpload", () => {
 			});
 		});
 
-		expect(result.current.files[0].thumbnailUri).toBe("https://cdn.example.com/poster.jpg");
+		expect(result.current.files[0].thumbnailUri).toBe(
+			"https://cdn.example.com/poster.jpg",
+		);
 		expect(revokeThumbnail).toHaveBeenCalledWith("blob:thumb-checker-replace");
 	});
 
@@ -1311,22 +1348,34 @@ describe("UploadProvider + useUpload", () => {
 		const { result } = renderHook(() => useUpload(), {
 			wrapper: makeWrapper(makeConfig({ adapter })),
 		});
-		act(() => { result.current.addFiles([makeFileRef()]); });
-		await act(async () => { await vi.advanceTimersByTimeAsync(0); });
+		act(() => {
+			result.current.addFiles([makeFileRef()]);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
 		expect(result.current.files[0].status).toBe("ready");
 
-		act(() => { result.current.updateFileStatus("video-123", "failed"); });
+		act(() => {
+			result.current.updateFileStatus("video-123", "failed");
+		});
 		expect(result.current.files[0].status).toBe("ready");
 	});
 
 	it("preserves thumbnailUri on ready transition (no force-clear)", async () => {
-		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce("blob:thumb-keep");
+		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+			"blob:thumb-keep",
+		);
 		const adapter = createMockAdapter();
 		const { result } = renderHook(() => useUpload(), {
 			wrapper: makeWrapper(makeConfig({ adapter })),
 		});
-		act(() => { result.current.addFiles([makeFileRef("v.mp4", true)]); });
-		await act(async () => { await vi.advanceTimersByTimeAsync(0); });
+		act(() => {
+			result.current.addFiles([makeFileRef("v.mp4", true)]);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
 		expect(result.current.files[0].thumbnailUri).toBe("blob:thumb-keep");
 
 		act(() => {
@@ -1341,13 +1390,19 @@ describe("UploadProvider + useUpload", () => {
 	});
 
 	it("ready without playbackUrl preserves thumbnailUri (no placeholder fallthrough)", async () => {
-		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce("blob:thumb-no-url");
+		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+			"blob:thumb-no-url",
+		);
 		const adapter = createMockAdapter();
 		const { result } = renderHook(() => useUpload(), {
 			wrapper: makeWrapper(makeConfig({ adapter })),
 		});
-		act(() => { result.current.addFiles([makeFileRef("v.mp4", true)]); });
-		await act(async () => { await vi.advanceTimersByTimeAsync(0); });
+		act(() => {
+			result.current.addFiles([makeFileRef("v.mp4", true)]);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
 
 		act(() => {
 			result.current.updateFileStatus("video-123", "ready");
@@ -1359,13 +1414,19 @@ describe("UploadProvider + useUpload", () => {
 	});
 
 	it("revokes local thumbnail blob URL on unmount when file is in ready state", async () => {
-		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce("blob:thumb-unmount-after-ready");
+		(createThumbnail as ReturnType<typeof vi.fn>).mockResolvedValueOnce(
+			"blob:thumb-unmount-after-ready",
+		);
 		const adapter = createMockAdapter();
 		const { result, unmount } = renderHook(() => useUpload(), {
 			wrapper: makeWrapper(makeConfig({ adapter })),
 		});
-		act(() => { result.current.addFiles([makeFileRef("v.mp4", true)]); });
-		await act(async () => { await vi.advanceTimersByTimeAsync(0); });
+		act(() => {
+			result.current.addFiles([makeFileRef("v.mp4", true)]);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
 
 		act(() => {
 			result.current.updateFileStatus("video-123", "ready", {
@@ -1373,12 +1434,18 @@ describe("UploadProvider + useUpload", () => {
 			});
 		});
 		expect(result.current.files[0].status).toBe("ready");
-		expect(result.current.files[0].thumbnailUri).toBe("blob:thumb-unmount-after-ready");
-		expect(revokeThumbnail).not.toHaveBeenCalledWith("blob:thumb-unmount-after-ready");
+		expect(result.current.files[0].thumbnailUri).toBe(
+			"blob:thumb-unmount-after-ready",
+		);
+		expect(revokeThumbnail).not.toHaveBeenCalledWith(
+			"blob:thumb-unmount-after-ready",
+		);
 
 		unmount();
 
-		expect(revokeThumbnail).toHaveBeenCalledWith("blob:thumb-unmount-after-ready");
+		expect(revokeThumbnail).toHaveBeenCalledWith(
+			"blob:thumb-unmount-after-ready",
+		);
 	});
 
 	it("updateFileStatus clears statusDetail on terminal transition", async () => {

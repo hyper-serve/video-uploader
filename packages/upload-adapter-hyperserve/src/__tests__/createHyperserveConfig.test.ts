@@ -54,9 +54,9 @@ describe("createHyperserveConfig", () => {
 		const config = createHyperserveConfig({
 			completeUpload,
 			createUpload,
-			pollVideoStatus,
 			maxConcurrentUploads: 5,
 			pollingIntervalMs: 5000,
+			pollVideoStatus,
 			uploadOptions: { isPublic: false, resolutions: ["1080p"] },
 			validate,
 		});

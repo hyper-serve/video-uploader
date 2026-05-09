@@ -117,10 +117,7 @@ export type ProcessingStatus = "processing" | "ready" | "failed";
 export interface StatusChecker {
 	checkStatus(options: {
 		uploadResult: UploadResult;
-		onStatusChange: (
-			status: ProcessingStatus,
-			data?: StatusUpdateData,
-		) => void;
+		onStatusChange: (status: ProcessingStatus, data?: StatusUpdateData) => void;
 		signal: AbortSignal;
 	}): void;
 }
