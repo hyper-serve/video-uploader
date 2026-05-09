@@ -12,8 +12,8 @@ const heroFiles = [uploadingFile, readyFile];
 export default function HeroSplit() {
 	return (
 		<div className="not-content" style={wrapper}>
-			<div style={split}>
-				<div style={codePane}>
+			<div className="hero-split" style={split}>
+				<div className="hero-split-code" style={codePane}>
 					<p style={codePaneLabel}>5 lines to get started</p>
 					<pre style={pre}>
 						<code>

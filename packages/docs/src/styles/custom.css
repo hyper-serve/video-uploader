@@ -2,3 +2,15 @@
 .social-icons::after {
 	display: none;
 }
+
+/* HeroSplit: stack the code/preview panes on narrow viewports */
+@media (max-width: 640px) {
+	.hero-split {
+		grid-template-columns: 1fr !important;
+		min-width: 0 !important;
+	}
+	.hero-split > .hero-split-code {
+		border-right: none !important;
+		border-bottom: 1px solid #1e293b !important;
+	}
+}
