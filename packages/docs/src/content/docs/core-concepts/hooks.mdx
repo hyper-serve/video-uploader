@@ -15,7 +15,7 @@ const {
   addFiles,           // (files: FileRef[]) => void
   removeFile,         // (id: string) => void
   retryFile,          // (id: string) => void
-  updateFileStatus,   // (videoId, status, playbackUrl?) => void
+  updateFileStatus,   // (videoId, status, data?) => void
   canAddMore,         // boolean: false when files.length >= maxFiles
   maxFiles,           // number | undefined
   isUploading,        // true if any file is validating or uploading
@@ -29,16 +29,25 @@ const {
 
 ### updateFileStatus
 
-Manually transition a `processing` file to `ready` or `failed` by `videoId`. Use this when you drive status updates via a webhook or SSE connection instead of a `StatusChecker`.
+Manually transition a `processing` file to `ready` or `failed`, or patch playback/thumbnail data on an already-ready file. Use this when you drive status updates via a webhook, SSE, or realtime broadcast instead of polling.
 
 ```typescript
 const { updateFileStatus } = useUpload();
 
-updateFileStatus(videoId, "ready", playbackUrl);
+// Flip ready immediately on broadcast; fetch URL separately.
+updateFileStatus(videoId, "ready");
+
+// Patch the URL when your fetch resolves.
+updateFileStatus(videoId, "ready", { playbackUrl });
+
+// Or provide both at once.
+updateFileStatus(videoId, "ready", { playbackUrl, thumbnailUri });
+
+// Mark failed.
 updateFileStatus(videoId, "failed");
 ```
 
-Only files currently in `"processing"` are affected. Calls for unknown or non-processing video IDs are no-ops.
+A `processing → ready | failed` call transitions status. A repeat `(videoId, "ready", data)` call on an already-ready file patches `data` in without changing status. Calls for unknown video IDs, or `"failed"` on an already-ready file, are no-ops.
 
 ## useFile
 

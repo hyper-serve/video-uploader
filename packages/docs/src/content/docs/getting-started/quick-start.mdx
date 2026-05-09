@@ -36,7 +36,7 @@ import {
 
 // These three callbacks call YOUR backend, which holds your Hyperserve API key.
 // The adapter handles the actual file upload to storage directly via the SDK,
-// but createUpload/completeUpload/getVideoStatus talk to the Hyperserve management
+// but createUpload/completeUpload/pollVideoStatus talk to the Hyperserve management
 // API, so they must be proxied server-side to keep your API key out of the browser.
 const config = createHyperserveConfig({
   createUpload: async (file, options) =>
@@ -48,7 +48,7 @@ const config = createHyperserveConfig({
   completeUpload: async (videoId) => {
     await fetch(`/api/complete-upload/${videoId}`, { method: "POST" });
   },
-  getVideoStatus: async (videoId) =>
+  pollVideoStatus: async (videoId) =>
     fetch(`/api/video-status/${videoId}`).then((r) => r.json()),
   uploadOptions: {
     isPublic: true,
@@ -75,7 +75,7 @@ function App() {
 
 ## What's happening
 
-1. **`createHyperserveConfig`** wires up the [Hyperserve](https://hyperserve.io) adapter, status checker, and your validation rules into a single config object. The adapter calls `putVideoToStorage` from the Hyperserve SDK directly to stream the file to cloud storage; no backend is needed for that part. However, `createUpload`, `completeUpload`, and `getVideoStatus` must talk to the Hyperserve management API using your API key, which can't be exposed in the browser. Those three callbacks are thin fetches to your own backend routes, which hold the key and proxy the calls to Hyperserve.
+1. **`createHyperserveConfig`** wires up the [Hyperserve](https://hyperserve.io) adapter, status checker, and your validation rules into a single config object. The adapter calls `putVideoToStorage` from the Hyperserve SDK directly to stream the file to cloud storage; no backend is needed for that part. However, `createUpload`, `completeUpload`, and `pollVideoStatus` must talk to the Hyperserve management API using your API key, which can't be exposed in the browser. Those three callbacks are thin fetches to your own backend routes, which hold the key and proxy the calls to Hyperserve.
 2. **`UploadProvider`** manages the upload state machine: file queue, concurrency, progress, abort/retry.
 3. **`ViewModeProvider`** provides list/grid toggle state to the UI components.
 4. **`DropZone`** handles drag-and-drop and file picker input.
@@ -85,7 +85,7 @@ All components read from the `UploadProvider` context. No prop drilling required
 
 ## Backend routes
 
-The three callbacks (`createUpload`, `completeUpload`, and `getVideoStatus`) must run server-side to keep your [Hyperserve](https://hyperserve.io) API key out of the browser. Each route must implement the following contract:
+The three callbacks (`createUpload`, `completeUpload`, and `pollVideoStatus`) must run server-side to keep your [Hyperserve](https://hyperserve.io) API key out of the browser. Each route must implement the following contract:
 
 | Route | Receives | Returns |
 |---|---|---|

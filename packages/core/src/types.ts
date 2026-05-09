@@ -76,6 +76,18 @@ export type UploadContextValue = {
 	addFiles: (files: FileRef[]) => void;
 	removeFile: (id: string) => void;
 	retryFile: (id: string) => void;
+	/**
+	 * Manually transition a `processing` file to `"ready"` or `"failed"`,
+	 * or patch playback/thumbnail data on an already-ready file.
+	 *
+	 * Use this for push-driven status delivery (webhook, SSE, realtime broadcast).
+	 * For polling, configure a `StatusChecker` on `UploadConfig` instead.
+	 *
+	 * - `(processing, "ready" | "failed", data?)` transitions the file.
+	 * - `(ready, "ready", data)` patches `playbackUrl` / `thumbnailUri` without changing status.
+	 * - `(ready, "failed")` is a no-op (terminal mismatch).
+	 * - Unknown `videoId` is a no-op.
+	 */
 	updateFileStatus: (
 		videoId: string,
 		status: "ready" | "failed",

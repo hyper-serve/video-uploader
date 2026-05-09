@@ -50,7 +50,7 @@ const config = createHyperserveConfig({
   completeUpload: async (videoId) => {
     await fetch(`/api/complete-upload/${videoId}`, { method: "POST" });
   },
-  getVideoStatus: async (videoId) =>
+  pollVideoStatus: async (videoId) =>
     fetch(`/api/video-status/${videoId}`).then((r) => r.json()),
   uploadOptions: {
     resolutions: ["480p", "1080p"],
@@ -84,11 +84,15 @@ After upload, the Hyperserve adapter polls your backend until the video finishes
 ```typescript
 const config = createHyperserveConfig({
   // ...
+  pollVideoStatus: async (videoId) => {
+    const res = await fetch(`/api/video-status/${videoId}`);
+    return res.json();
+  },
   pollingIntervalMs: 5000,
 });
 ```
 
-Prefer push updates via webhook or SSE? Skip the status checker and call `updateFileStatus` from `useUpload()`. See [Hooks](/core-concepts/hooks/).
+If you do not provide `pollVideoStatus`, files stay in `"processing"` indefinitely. For push delivery (webhook, SSE, Realtime broadcast), skip the poller and call `updateFileStatus` from `useUpload()` when your server signals completion. See [Driving status from a webhook or SSE](/adapters/custom-adapter/#driving-status-from-a-webhook-or-sse).
 
 ## Dynamic config from form state
 
@@ -105,7 +109,7 @@ function UploadModal({ isPublic, resolutions }: Props) {
       createHyperserveConfig({
         createUpload: /* ... */,
         completeUpload: /* ... */,
-        getVideoStatus: /* ... */,
+        pollVideoStatus: /* ... */,
         uploadOptions: { isPublic, resolutions },
       }),
     [isPublic, resolutions],

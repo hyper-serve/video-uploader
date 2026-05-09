@@ -181,7 +181,7 @@ const { updateFileStatus } = useUpload();
 
 socket.onmessage = (event) => {
   const { videoId, status, playbackUrl } = JSON.parse(event.data);
-  updateFileStatus(videoId, status, playbackUrl);
+  updateFileStatus(videoId, status, { playbackUrl });
 };
 ```
 
