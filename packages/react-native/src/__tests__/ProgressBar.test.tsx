@@ -67,10 +67,10 @@ describe("ProgressBar (native)", () => {
 		// Find color entries; trackStyle (last in style array) should win.
 		const colors = flat
 			.filter(
-				(s): s is { backgroundColor: string } =>
+				(s: unknown): s is { backgroundColor: string } =>
 					!!s && typeof s === "object" && "backgroundColor" in s,
 			)
-			.map((s) => s.backgroundColor);
+			.map((s: { backgroundColor: string }) => s.backgroundColor);
 		expect(colors[colors.length - 1]).toBe("rgb(255, 255, 255)");
 	});
 });
