@@ -1,6 +1,7 @@
 import type {
 	FileRef,
 	StatusChecker,
+	StatusUpdateData,
 	UploadAdapter,
 	UploadConfig,
 	UploadResult,
@@ -53,8 +54,7 @@ class MockStatusChecker implements StatusChecker {
 		uploadResult: UploadResult;
 		onStatusChange: (
 			status: "processing" | "ready" | "failed",
-			playbackUrl?: string,
-			statusDetail?: string,
+			data?: StatusUpdateData,
 		) => void;
 		signal: AbortSignal;
 	}): void {
@@ -69,7 +69,7 @@ class MockStatusChecker implements StatusChecker {
 			elapsed += 500;
 			if (elapsed < PROCESSING_DURATION_MS) {
 				const pct = Math.round((elapsed / PROCESSING_DURATION_MS) * 100);
-				onStatusChange("processing", undefined, `Transcoding ${pct}%`);
+				onStatusChange("processing", { statusDetail: `Transcoding ${pct}%` });
 			} else {
 				clearInterval(interval);
 				onStatusChange("ready");
