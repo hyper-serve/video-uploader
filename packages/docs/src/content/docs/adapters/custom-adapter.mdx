@@ -184,12 +184,16 @@ The generic on `UploadConfig<MyUploadOptions>` ensures `uploadOptions` is type-c
 
 If you prefer to push status updates rather than poll, skip the `StatusChecker` entirely and call `updateFileStatus` from `useUpload()` when your server sends an event.
 
+`updateFileStatus` only accepts the terminal statuses `"ready"` and `"failed"`, so narrow whatever your server sends before forwarding it:
+
 ```tsx
 const { updateFileStatus } = useUpload();
 
 socket.onmessage = (event) => {
   const { videoId, status, playbackUrl } = JSON.parse(event.data);
-  updateFileStatus(videoId, status, { playbackUrl });
+  if (status === "ready" || status === "failed") {
+    updateFileStatus(videoId, status, { playbackUrl });
+  }
 };
 ```
 

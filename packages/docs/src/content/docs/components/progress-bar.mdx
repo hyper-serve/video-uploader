@@ -26,6 +26,17 @@ import { ProgressBar } from "@hyperserve/video-uploader-react";
 | `trackClassName` | `string` | none | Class for the track |
 | `fillClassName` | `string` | none | Class for the fill |
 | `styles` | `ProgressBarStyles` | none | Slot map applied to internal elements (see [Slots](#slots) below) |
+| `children` | `(progress: number) => ReactNode` | none | Render-prop override; replaces the default track-and-fill markup entirely |
+
+## Custom rendering
+
+Pass a `children` render function to bypass the default markup and draw your own indicator. When `children` is provided, all style/className/slot props are ignored: you own the rendering.
+
+```tsx
+<ProgressBar progress={progress}>
+  {(value) => <span>{value}%</span>}
+</ProgressBar>
+```
 
 ## Styling
 

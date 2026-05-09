@@ -3,7 +3,7 @@ title: Hooks
 description: React hooks for reading upload state and driving file actions.
 ---
 
-The library exposes two hooks. `useUpload` gives you the full upload context — file list, actions, and derived state — and is the primary way to drive your UI. `useFile` is a scoped hook for use inside custom `FileItem` renderers; it reads the file context injected by `FileList` so you don't have to thread file state as a prop.
+The library exposes two hooks. `useUpload` gives you the full upload context: file list, actions, and derived state, and is the primary way to drive your UI. `useFile` subscribes to a single file by id, returning just that file's state without re-rendering on unrelated changes elsewhere in the queue.
 
 ## useUpload
 
@@ -51,13 +51,20 @@ A `processing → ready | failed` call transitions status. A repeat `(videoId, "
 
 ## useFile
 
-Per-file hook for use inside custom `FileItem` render functions. Provides the `FileState` for the current file context without needing to pass it as a prop.
+Subscribes to a single file in the upload queue by id. Returns the matching `FileState`, or `undefined` if no file with that id exists (for example, after `removeFile` runs).
+
+```typescript
+function useFile(fileId: string): FileState | undefined;
+```
+
+Useful when a component holds a file id (from a route param, persisted state, or a parent that only forwards an id) and wants to render that file's live state without threading the full file object as a prop.
 
 ```tsx
 import { useFile } from "@hyperserve/video-uploader";
 
-function CustomFileRow() {
-  const file = useFile();
+function FileStatusLine({ fileId }: { fileId: string }) {
+  const file = useFile(fileId);
+  if (!file) return null;
   return <div>{file.ref.name}: {file.status}</div>;
 }
 ```
