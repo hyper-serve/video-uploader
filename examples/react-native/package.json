@@ -13,7 +13,7 @@
     "verify:bundle": "npx expo export --platform ios --dev --output-dir /tmp/uvu-bundle-check && echo '✅ Metro bundle resolved successfully'"
   },
   "dependencies": {
-    "@hyperserve/hyperserve-js": "latest",
+    "@hyperserve/hyperserve-js": "^0.1.0",
     "@hyperserve/video-uploader": "workspace:*",
     "@hyperserve/video-uploader-adapter-hyperserve": "workspace:*",
     "@hyperserve/video-uploader-react-native": "workspace:*",

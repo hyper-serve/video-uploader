@@ -8,7 +8,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { demoConfig, pickVideos } from "./examples/shared";
+import { demoConfig, pickVideos } from "./shared";
 
 export default function App() {
 	return (

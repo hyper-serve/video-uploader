@@ -14,7 +14,7 @@
       "name": "@hyperserve/video-uploader-example-react-native",
       "version": "0.0.1",
       "dependencies": {
-        "@hyperserve/hyperserve-js": "latest",
+        "@hyperserve/hyperserve-js": "^0.1.0",
         "@hyperserve/video-uploader": "workspace:*",
         "@hyperserve/video-uploader-adapter-hyperserve": "workspace:*",
         "@hyperserve/video-uploader-react-native": "workspace:*",
@@ -39,7 +39,7 @@
       "name": "@hyperserve/video-uploader-example-web",
       "version": "0.0.1",
       "dependencies": {
-        "@hyperserve/hyperserve-js": "latest",
+        "@hyperserve/hyperserve-js": "^0.1.0",
         "@hyperserve/video-uploader": "workspace:*",
         "@hyperserve/video-uploader-adapter-hyperserve": "workspace:*",
         "@hyperserve/video-uploader-react": "workspace:*",

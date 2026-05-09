@@ -3,24 +3,14 @@ import { hyperserve } from "../../../lib/hyperserve";
 
 export async function POST(req: Request) {
 	try {
-		const {
-			filename,
-			fileSizeBytes,
-			resolutions,
-			isPublic,
-			custom_user_metadata,
-			thumbnail_timestamps_seconds,
-		} = await req.json();
+		const { filename, fileSizeBytes, resolutions, isPublic } =
+			await req.json();
 
 		const result = await hyperserve.createVideo({
 			filename,
 			fileSizeBytes,
 			isPublic,
 			resolutions,
-			...(custom_user_metadata && { customMetadata: custom_user_metadata }),
-			...(thumbnail_timestamps_seconds && {
-				thumbnailTimestampsSeconds: thumbnail_timestamps_seconds,
-			}),
 		});
 
 		return NextResponse.json({

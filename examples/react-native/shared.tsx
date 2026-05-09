@@ -58,11 +58,11 @@ export async function pickVideos(): Promise<FileRef[]> {
 	});
 	if (result.canceled) return [];
 	return result.assets
-		.filter((a) => a.mimeType?.startsWith("video/"))
+		.filter((a) => a.mimeType?.startsWith("video/") && a.size && a.size > 0)
 		.map((asset) => ({
 			name: asset.name,
 			platform: "native" as const,
-			size: asset.size ?? 0,
+			size: asset.size as number,
 			type: asset.mimeType ?? "video/mp4",
 			uri: asset.uri,
 		}));
