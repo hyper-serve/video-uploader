@@ -9,8 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Breaking changes
 
 - `HyperserveConfig.getVideoStatus` renamed to `pollVideoStatus`. Mechanical rename.
-- `updateFileStatus(id, status, playbackUrl?)` is now `updateFileStatus(id, status, data?)` where `data` is `{ playbackUrl?, thumbnailUri? }`. Migration: wrap the URL in an object.
-- `StatusChecker.onStatusChange` callback signature changed from `(status, playbackUrl?, statusDetail?)` to `(status, data?)`. Only relevant if you implement a custom `StatusChecker`.
+- `updateFileStatus(id, status, playbackUrl?)` is now `updateFileStatus(id, status, data?)` where `data` is `StatusUpdateData = { playbackUrl?, thumbnailUri?, statusDetail? }`. For `updateFileStatus`, only `playbackUrl` and `thumbnailUri` are meaningful. Migration: wrap the URL in an object.
+- `StatusChecker.onStatusChange` callback signature changed from `(status, playbackUrl?, statusDetail?)` to `(status, data?: StatusUpdateData)`. Only relevant if you implement a custom `StatusChecker`. `statusDetail` is now passed via `data.statusDetail` during processing.
 - `pollVideoStatus` is no longer exported from `@hyperserve/video-uploader-adapter-hyperserve`. Use `HyperserveStatusChecker` directly.
 
 ### Behavior changes

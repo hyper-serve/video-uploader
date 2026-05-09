@@ -13,7 +13,7 @@ The thumbnail is stored as a blob URL in `FileState.thumbnailUri` and is availab
 
 ## Post-upload playback
 
-Once a file reaches `ready`, `FileState.playbackUrl` is populated with the URL returned by your adapter. At that point `thumbnailUri` is cleared. The blob URL is revoked and the field is set to `null`.
+Once a file reaches `ready`, `FileState.playbackUrl` is populated with the URL provided by your adapter (via `UploadResult`, polling, or `updateFileStatus`). The local `thumbnailUri` is preserved past `ready` and acts as a fallback when no `playbackUrl` is available yet (for example, while a push-driven integrator fetches a signed URL after a webhook arrives).
 
 Use the `Thumbnail` component's `playback` prop to switch from thumbnail to video player automatically:
 
@@ -21,15 +21,18 @@ Use the `Thumbnail` component's `playback` prop to switch from thumbnail to vide
 <Thumbnail file={file} playback />
 ```
 
-With `playback` set, the component renders a thumbnail image during upload and transitions to a `<video>` element once the file is ready and a `playbackUrl` is available.
+With `playback` set, the component renders a thumbnail image during upload, falls back to that thumbnail at `ready` if no `playbackUrl` exists, and transitions to a `<video>` element once a `playbackUrl` is set.
 
 ## Lifecycle
 
 | Phase | `thumbnailUri` | `playbackUrl` |
 |-------|---------------|---------------|
 | File added → uploading | blob URL (or `null` if unsupported) | `null` |
-| `ready` | `null` (revoked) | backend URL |
-| Provider unmounts | all remaining blob URLs revoked | |
+| `ready`, no URL yet | blob URL preserved as fallback | `null` |
+| `ready`, URL available | blob URL preserved (or remote URL if integrator provided one) | backend URL |
+| File removed or provider unmounts | local blob URLs revoked | |
+
+The local thumbnail blob URL is revoked only on `removeFile` and provider unmount, not on the `ready` transition. If your integration calls `updateFileStatus(videoId, "ready", { thumbnailUri })` with a remote URL, any prior local blob URL for that file is revoked at that point.
 
 ## Platform support
 

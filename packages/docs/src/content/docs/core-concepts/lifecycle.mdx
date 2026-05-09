@@ -22,7 +22,7 @@ retry (from failed) ──► selected (re-enters the flow)
 | `validating` | Running client-side validation (size, type, duration) |
 | `uploading` | Upload in progress, `progress` updates via adapter callback |
 | `processing` | Upload complete, backend is processing (transcoding, etc.) |
-| `ready` | Playback URL available |
+| `ready` | Backend processing complete. `playbackUrl` is set if the adapter or status checker provided one; otherwise the integrator can patch it in via `updateFileStatus` |
 | `failed` | Validation, upload, or processing failed. `error` contains the reason |
 
 ## FileState
