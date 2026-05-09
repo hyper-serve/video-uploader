@@ -3,14 +3,19 @@
 	display: none;
 }
 
-/* HeroSplit: stack the code/preview panes on narrow viewports */
+/* HeroSplit: stack the code/preview panes on narrow viewports.
+   !important is required to override Starlight's higher-specificity hero styles. */
 @media (max-width: 640px) {
 	.hero-split {
+		/* biome-ignore lint/complexity/noImportantStyles: override Starlight hero grid */
 		grid-template-columns: 1fr !important;
+		/* biome-ignore lint/complexity/noImportantStyles: override Starlight hero grid */
 		min-width: 0 !important;
 	}
 	.hero-split > .hero-split-code {
+		/* biome-ignore lint/complexity/noImportantStyles: override Starlight hero divider */
 		border-right: none !important;
+		/* biome-ignore lint/complexity/noImportantStyles: override Starlight hero divider */
 		border-bottom: 1px solid #1e293b !important;
 	}
 }

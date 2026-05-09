@@ -236,8 +236,11 @@ describe("FileItem (native)", () => {
 			Array.isArray(name.props.style) ? name.props.style : [name.props.style]
 		).flat();
 		const colors = flat
-			.filter((s: any) => s && typeof s === "object" && "color" in s)
-			.map((s: any) => s.color);
+			.filter(
+				(s): s is { color: string } =>
+					!!s && typeof s === "object" && "color" in s,
+			)
+			.map((s) => s.color);
 		expect(colors[colors.length - 1]).toBe("rgb(0, 0, 255)");
 	});
 
