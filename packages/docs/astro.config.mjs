@@ -5,10 +5,6 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
 	integrations: [
 		starlight({
-			components: {
-				// ThemeProvider: "./src/components/ThemeProvider.astro",
-				ThemeSelect: "./src/components/ThemeSelect.astro",
-			},
 			customCss: ["./src/styles/custom.css"],
 			sidebar: [
 				{
