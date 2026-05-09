@@ -27,4 +27,4 @@ import { toFileRefs } from "@hyperserve/video-uploader";
 </UploadProvider>
 ```
 
-See the [full documentation](https://your-docs-url).
+See the [full documentation](https://videouploader.fyi).

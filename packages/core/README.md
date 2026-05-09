@@ -23,4 +23,4 @@ function YourUI() {
 }
 ```
 
-See the [full documentation](https://your-docs-url) for adapters, validators, and the headless guide.
+See the [full documentation](https://videouploader.fyi) for adapters, validators, and the headless guide.

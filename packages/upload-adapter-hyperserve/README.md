@@ -31,4 +31,4 @@ const config = createHyperserveConfig({
 });
 ```
 
-The callbacks call your backend, which proxies to Hyperserve with your API key. See the [full documentation](https://your-docs-url).
+The callbacks call your backend, which proxies to Hyperserve with your API key. See the [full documentation](https://videouploader.fyi).

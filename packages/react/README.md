@@ -23,4 +23,4 @@ import { UploadProvider } from "@hyperserve/video-uploader";
 </UploadProvider>
 ```
 
-See the [full documentation](https://your-docs-url) for component API and theming.
+See the [full documentation](https://videouploader.fyi) for component API and theming.
