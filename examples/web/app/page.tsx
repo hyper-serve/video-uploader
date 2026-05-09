@@ -36,7 +36,7 @@ function makeConfig() {
 			if (!r.ok) throw new Error(`Upload init failed: ${r.status}`);
 			return r.json();
 		},
-		getVideoStatus: async (videoId) => {
+		pollVideoStatus: async (videoId) => {
 			const r = await fetch(`/api/video-status/${videoId}`);
 			if (!r.ok) throw new Error(`Status check failed: ${r.status}`);
 			return r.json();
