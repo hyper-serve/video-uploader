@@ -18,3 +18,5 @@ android/
 /docs/superpowers
 
 .superpowers
+
+.claude/settings.local.json
