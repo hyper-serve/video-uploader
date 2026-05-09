@@ -24,8 +24,8 @@ const config = createHyperserveConfig({
   completeUpload: async (videoId) => {
     await fetch(`/api/complete-upload/${videoId}`, { method: "POST" });
   },
-  // optional — omit if you drive status updates via webhook or SSE instead of polling
-  getVideoStatus: async (videoId) =>
+  // optional: omit if you drive status updates via webhook or SSE instead of polling
+  pollVideoStatus: async (videoId) =>
     fetch(`/api/video-status/${videoId}`).then((r) => r.json()),
   uploadOptions: { isPublic: true, resolutions: ["480p", "1080p"] },
 });

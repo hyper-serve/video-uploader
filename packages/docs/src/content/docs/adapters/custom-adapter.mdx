@@ -107,13 +107,18 @@ return { videoId, playbackUrl };
 If your backend needs time to process after upload (transcoding, thumbnail generation, etc.), implement `StatusChecker`. The library calls it after each successful upload.
 
 ```typescript
+type StatusUpdateData = {
+  playbackUrl?: string;
+  thumbnailUri?: string;
+  statusDetail?: string;
+};
+
 interface StatusChecker {
   checkStatus(options: {
     uploadResult: UploadResult;
     onStatusChange: (
       status: "processing" | "ready" | "failed",
-      playbackUrl?: string,
-      statusDetail?: string,
+      data?: StatusUpdateData,
     ) => void;
     signal: AbortSignal;
   }): void;
@@ -135,7 +140,10 @@ class MyStatusChecker implements StatusChecker {
         ).then((r) => r.json());
 
         if (res.status === "ready") {
-          onStatusChange("ready", res.playbackUrl);
+          onStatusChange("ready", {
+            playbackUrl: res.playbackUrl,
+            thumbnailUri: res.thumbnailUri,
+          });
           return;
         }
         if (res.status === "failed") {
@@ -143,7 +151,7 @@ class MyStatusChecker implements StatusChecker {
           return;
         }
 
-        onStatusChange("processing", undefined, res.statusDetail);
+        onStatusChange("processing", { statusDetail: res.statusDetail });
         await new Promise((r) => setTimeout(r, 3000));
       }
     };
