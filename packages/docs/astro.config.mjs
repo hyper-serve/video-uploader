@@ -6,6 +6,100 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			customCss: ["./src/styles/custom.css"],
+			favicon: "/favicon.svg",
+			head: [
+				{
+					attrs: {
+						content: "https://videouploader.fyi/og.png",
+						property: "og:image",
+					},
+					tag: "meta",
+				},
+				{ attrs: { content: "1200", property: "og:image:width" }, tag: "meta" },
+				{ attrs: { content: "630", property: "og:image:height" }, tag: "meta" },
+				{
+					attrs: {
+						content:
+							"Universal Video Uploader: headless video uploads with a full UI kit",
+						property: "og:image:alt",
+					},
+					tag: "meta",
+				},
+				{
+					attrs: {
+						content: "Universal Video Uploader",
+						property: "og:site_name",
+					},
+					tag: "meta",
+				},
+				{
+					attrs: {
+						content: "https://videouploader.fyi/og.png",
+						name: "twitter:image",
+					},
+					tag: "meta",
+				},
+				{
+					attrs: { content: "summary_large_image", name: "twitter:card" },
+					tag: "meta",
+				},
+				{ attrs: { content: "#0a0a0b", name: "theme-color" }, tag: "meta" },
+				{
+					attrs: { href: "/apple-touch-icon.png", rel: "apple-touch-icon" },
+					tag: "link",
+				},
+				{
+					attrs: {
+						href: "/favicon-32.png",
+						rel: "icon",
+						sizes: "32x32",
+						type: "image/png",
+					},
+					tag: "link",
+				},
+				{
+					attrs: { type: "application/ld+json" },
+					content: JSON.stringify({
+						"@context": "https://schema.org",
+						"@graph": [
+							{
+								"@id": "https://videouploader.fyi/#website",
+								"@type": "WebSite",
+								description:
+									"Single or multi-video uploads for React and React Native. Headless and full UI kit.",
+								name: "Universal Video Uploader",
+								publisher: { "@id": "https://hyperserve.io/#organization" },
+								url: "https://videouploader.fyi",
+							},
+							{
+								"@id": "https://videouploader.fyi/#software",
+								"@type": "SoftwareApplication",
+								applicationCategory: "DeveloperApplication",
+								author: { "@id": "https://hyperserve.io/#organization" },
+								description:
+									"Single or multi-video uploads for React and React Native. Headless and full UI kit.",
+								image: "https://videouploader.fyi/og.png",
+								name: "Universal Video Uploader",
+								offers: { "@type": "Offer", price: 0, priceCurrency: "USD" },
+								operatingSystem: "Web, iOS, Android",
+								sameAs: ["https://github.com/hyper-serve/video-uploader"],
+								url: "https://videouploader.fyi",
+							},
+							{
+								"@id": "https://hyperserve.io/#organization",
+								"@type": "Organization",
+								name: "Hyperserve",
+								url: "https://hyperserve.io",
+							},
+						],
+					}),
+					tag: "script",
+				},
+			],
+			logo: {
+				alt: "Universal Video Uploader",
+				src: "./src/assets/uvu-logo.svg",
+			},
 			sidebar: [
 				{
 					items: [
@@ -80,4 +174,5 @@ export default defineConfig({
 		}),
 		react(),
 	],
+	site: "https://videouploader.fyi",
 });

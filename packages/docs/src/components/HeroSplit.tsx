@@ -1,15 +1,16 @@
+import { UploadProvider } from "@hyperserve/video-uploader";
 import {
 	DropZone,
 	FileList,
 	FileListToolbar,
+	ViewModeProvider,
 } from "@hyperserve/video-uploader-react";
 import type React from "react";
-import { MockFilesProvider } from "./demos/MockFilesProvider";
-import { readyFile, uploadingFile } from "./demos/mockFileState";
-
-const heroFiles = [uploadingFile, readyFile];
+import { useMemo } from "react";
+import { createMockConfig } from "./demos/MockAdapter";
 
 export default function HeroSplit() {
+	const config = useMemo(() => createMockConfig(), []);
 	return (
 		<div className="not-content" style={wrapper}>
 			<div className="hero-split" style={split}>
@@ -58,15 +59,17 @@ export default function HeroSplit() {
 						</code>
 					</pre>
 				</div>
-				<div style={previewPane}>
-					<p style={previewPaneLabel}>What you get</p>
-					<MockFilesProvider files={heroFiles}>
-						<div style={previewStack}>
-							<DropZone />
-							<FileListToolbar right={<FileListToolbar.ViewToggle />} />
-							<FileList />
-						</div>
-					</MockFilesProvider>
+				<div className="hero-split-preview" style={previewPane}>
+					<p style={previewPaneLabel}>Try it live</p>
+					<UploadProvider config={config}>
+						<ViewModeProvider>
+							<div style={previewStack}>
+								<DropZone supportingText="Fully simulated, nothing leaves your browser." />
+								<FileListToolbar right={<FileListToolbar.ViewToggle />} />
+								<FileList emptyMessage="Drop or browse files to see it in action." />
+							</div>
+						</ViewModeProvider>
+					</UploadProvider>
 				</div>
 			</div>
 		</div>
@@ -140,8 +143,6 @@ const punct: React.CSSProperties = { color: "#94a3b8" };
 const previewPane: React.CSSProperties = {
 	background: "#f8fafc",
 	padding: "1.25rem 1.5rem",
-	pointerEvents: "none",
-	userSelect: "none",
 };
 
 const previewStack: React.CSSProperties = {

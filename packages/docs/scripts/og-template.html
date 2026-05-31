@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    background: #0a0a0b; color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    position: relative; overflow: hidden;
+  }
+  .glow { position: absolute; inset: 0;
+    background: radial-gradient(55% 75% at 82% 20%, rgba(250,204,21,.13), transparent 60%); }
+  .stage { position: relative; height: 100%; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; gap: 34px; padding: 90px 100px; }
+  .title { font-weight: 700; letter-spacing: -.02em; font-size: 72px; line-height: 1.05; }
+  .tag { color: #a1a1aa; font-size: 36px; line-height: 1.4; max-width: 900px; }
+  .by { color: #facc15; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; font-size: 22px; }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="stage">
+    <svg width="150" height="150" viewBox="0 0 64 64" fill="none" role="img" aria-label="Universal Video Uploader">
+      <title>Universal Video Uploader</title>
+      <circle cx="32" cy="32" r="28" stroke="#facc15" stroke-width="3.5" opacity="0.55" fill="none"/>
+      <circle cx="51.8" cy="12.2" r="3.6" fill="#facc15"/>
+      <g stroke="#facc15" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none">
+        <path d="M20 39 L32 27 L44 39" opacity="0.5"/>
+        <path d="M20 29 L32 17 L44 29"/>
+      </g>
+    </svg>
+    <div class="title">Universal Video Uploader</div>
+    <div class="tag">Single or multi-video uploads for React and React Native. Headless and full UI kit.</div>
+    <div class="by">Built by Hyperserve</div>
+  </div>
+</body>
+</html>

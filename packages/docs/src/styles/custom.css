@@ -1,4 +1,33 @@
-/* HeroSplit: stack the code/preview panes on narrow viewports.
+/* Brand accent only: Hyperserve amber. Surfaces stay on Starlight's defaults. */
+:root[data-theme="dark"] {
+	--sl-color-accent-low: #422006;
+	--sl-color-accent: #facc15;
+	/* Use the true brand amber for accent text/fills too (Starlight defaults this to a
+	   paler tint, which read as the wrong yellow on dark). */
+	--sl-color-accent-high: #facc15;
+}
+
+:root[data-theme="light"] {
+	--sl-color-accent-low: #fef9c3;
+	--sl-color-accent: #facc15;
+	--sl-color-accent-high: #713f12;
+	/* Bright amber is unreadable as text on white, so links and active items use a
+	   neutral slate. Amber is reserved for fills (buttons, logo). */
+	--sl-color-text-accent: #334155;
+	/* The banner sits on amber; force dark text (Starlight defaults to white here). */
+	--sl-color-banner-text: #1a1a1a;
+}
+
+/* Light-mode primary buttons: amber fill with dark text. Starlight would otherwise
+   place white text on the accent color, which is unreadable on amber. */
+:root[data-theme="light"] .sl-link-button.primary,
+:root[data-theme="light"] .sl-link-button.primary:hover {
+	background: #facc15;
+	border-color: #facc15;
+	color: #1a1a1a;
+}
+
+/* HeroSplit: stack the code/preview panes on narrow viewports, demo first.
    !important is required to override Starlight's higher-specificity hero styles. */
 @media (max-width: 640px) {
 	.hero-split {
@@ -7,10 +36,14 @@
 		/* biome-ignore lint/complexity/noImportantStyles: override Starlight hero grid */
 		min-width: 0 !important;
 	}
+	/* Live demo leads, code follows. */
+	.hero-split > .hero-split-preview {
+		order: 1;
+		border-bottom: 1px solid #1e293b;
+	}
 	.hero-split > .hero-split-code {
+		order: 2;
 		/* biome-ignore lint/complexity/noImportantStyles: override Starlight hero divider */
 		border-right: none !important;
-		/* biome-ignore lint/complexity/noImportantStyles: override Starlight hero divider */
-		border-bottom: 1px solid #1e293b !important;
 	}
 }

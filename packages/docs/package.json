@@ -6,7 +6,8 @@
 	"scripts": {
 		"dev": "astro dev",
 		"build": "astro build",
-		"preview": "astro preview"
+		"preview": "astro preview",
+		"gen:assets": "node scripts/generate-assets.mjs"
 	},
 	"dependencies": {
 		"@astrojs/react": "5.0.0",
@@ -19,6 +20,7 @@
 	},
 	"devDependencies": {
 		"@types/react": "19.2.14",
-		"@types/react-dom": "19.2.3"
+		"@types/react-dom": "19.2.3",
+		"playwright": "^1.49.0"
 	}
 }
