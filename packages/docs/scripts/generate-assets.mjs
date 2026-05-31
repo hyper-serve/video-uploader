@@ -11,7 +11,7 @@ const page = await browser.newPage({ deviceScaleFactor: 1 });
 
 // 1. og.png (1200x630) from the HTML template
 await page.setViewportSize({ height: 630, width: 1200 });
-await page.goto("file://" + path.join(here, "og-template.html"));
+await page.goto(`file://${path.join(here, "og-template.html")}`);
 await page.screenshot({ path: path.join(pub, "og.png") });
 
 // 2. icon PNGs from the favicon SVG (tile is opaque, no transparency needed)
