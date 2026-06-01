@@ -5,6 +5,10 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
 	integrations: [
 		starlight({
+			components: {
+				Footer: "./src/components/overrides/Footer.astro",
+				SocialIcons: "./src/components/overrides/SocialIcons.astro",
+			},
 			customCss: ["./src/styles/custom.css"],
 			favicon: "/favicon.svg",
 			head: [

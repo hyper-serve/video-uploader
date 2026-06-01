@@ -1,0 +1,58 @@
+---
+import config from "virtual:starlight/user-config";
+import { Icon } from "@astrojs/starlight/components";
+import wordmark from "../../../public/hyperserve-wordmark.svg?raw";
+
+// Override of Starlight's SocialIcons. The Hyperserve link is rendered as the
+// inlined wordmark instead of a bare external-arrow icon, so visitors can tell
+// where it goes. The wordmark uses currentColor so it works in both themes. All
+// other social entries keep Starlight's default icon styling.
+
+const links = config.social || [];
+const isHyperserve = (href: string) => href.includes("hyperserve.io");
+const textLinks = links.filter((l) => isHyperserve(l.href));
+const iconLinks = links.filter((l) => !isHyperserve(l.href));
+---
+
+{
+	links.length > 0 && (
+		<div class="sl-flex social-icons">
+			{textLinks.map(({ href, label }) => (
+				<a {href} rel="me" class="hyperserve-link" title={label}>
+					<span class="wordmark" set:html={wordmark} />
+				</a>
+			))}
+			{iconLinks.map(({ href, icon, label }) => (
+				<a {href} rel="me" class="sl-flex" title={label}>
+					<span class="sr-only">{label}</span>
+					<Icon name={icon} />
+				</a>
+			))}
+		</div>
+	)
+}
+
+<style>
+	div {
+		gap: 1rem;
+		align-items: center;
+		padding-inline-start: 0.75rem;
+	}
+
+	a {
+		color: var(--sl-color-text-accent);
+	}
+	a:hover {
+		opacity: 0.66;
+	}
+
+	.hyperserve-link {
+		display: inline-flex;
+		align-items: center;
+	}
+	.wordmark :global(svg) {
+		display: block;
+		width: auto;
+		height: 1.25rem;
+	}
+</style>
