@@ -4,12 +4,8 @@ const path = require("node:path");
 const config = getDefaultConfig(__dirname);
 
 const repoRoot = path.resolve(__dirname, "../..");
-const corePackageRoot = path.resolve(repoRoot, "packages/core");
-const nativeUiPackageRoot = path.resolve(repoRoot, "packages/react-native");
-
 config.watchFolders = [
-	corePackageRoot,
-	nativeUiPackageRoot,
+	path.resolve(repoRoot, "packages"),
 	path.resolve(repoRoot, "node_modules"),
 ];
 
