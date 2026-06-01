@@ -1,8 +1,8 @@
 import type { FileState } from "@hyperserve/video-uploader";
 import type React from "react";
 import { useEffect, useState } from "react";
-import { ThumbnailPlaceholderIcon } from "./icons.js";
-import { colors, radius, thumbnailShadow } from "./theme.js";
+import { ThumbnailPlaceholderIcon } from "./icons";
+import { colors, radius, thumbnailShadow } from "./theme";
 
 export type ThumbnailStyles = {
 	image?: React.CSSProperties;

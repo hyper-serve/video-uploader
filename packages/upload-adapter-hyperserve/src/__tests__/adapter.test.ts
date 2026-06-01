@@ -1,7 +1,7 @@
 import type { FileRef } from "@hyperserve/video-uploader";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { HyperserveAdapter } from "../adapter/hyperserve.js";
-import type { HyperserveUploadOptions } from "../types.js";
+import { HyperserveAdapter } from "../adapter/hyperserve";
+import type { HyperserveUploadOptions } from "../types";
 
 vi.mock("@hyperserve/hyperserve-js/browser", () => ({
 	putVideoToStorage: vi.fn(),

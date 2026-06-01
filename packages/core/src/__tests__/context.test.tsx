@@ -1,9 +1,9 @@
 import { act, renderHook } from "@testing-library/react";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { UploadProvider } from "../context.js";
-import { useUpload } from "../hooks/useUpload.js";
-import { createThumbnail, revokeThumbnail } from "../platform/thumbnail.js";
+import { UploadProvider } from "../context";
+import { useUpload } from "../hooks/useUpload";
+import { createThumbnail, revokeThumbnail } from "../platform/thumbnail";
 import type {
 	FileRef,
 	ProcessingStatus,
@@ -12,9 +12,9 @@ import type {
 	UploadAdapter,
 	UploadConfig,
 	UploadResult,
-} from "../types.js";
+} from "../types";
 
-vi.mock("../platform/thumbnail.js", () => ({
+vi.mock("../platform/thumbnail", () => ({
 	createThumbnail: vi.fn().mockResolvedValue(null),
 	revokeThumbnail: vi.fn(),
 }));

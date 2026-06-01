@@ -1,7 +1,7 @@
 import type { FileStatus } from "@hyperserve/video-uploader";
 import { render, screen } from "@testing-library/react-native";
 import { Text, View } from "react-native";
-import { StatusBadge } from "../StatusBadge.js";
+import { StatusBadge } from "../StatusBadge";
 
 describe("StatusBadge (native)", () => {
 	it("renders default label for each status", () => {

@@ -5,7 +5,7 @@ import {
 	screen,
 	waitFor,
 } from "@testing-library/react-native";
-import { FilePicker } from "../FilePicker.js";
+import { FilePicker } from "../FilePicker";
 
 const mockAddFiles = jest.fn();
 

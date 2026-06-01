@@ -8,7 +8,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { createThumbnail, revokeThumbnail } from "./platform/thumbnail.js";
+import { createThumbnail, revokeThumbnail } from "./platform/thumbnail";
 import type {
 	FileRef,
 	FileState,
@@ -16,7 +16,7 @@ import type {
 	StatusUpdateData,
 	UploadConfig,
 	UploadContextValue,
-} from "./types.js";
+} from "./types";
 
 function generateId(): string {
 	if (typeof crypto !== "undefined" && crypto.randomUUID) {

@@ -1,8 +1,8 @@
 import type { FileState, WebFileRef } from "@hyperserve/video-uploader";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { FileItem } from "../FileItem.js";
-import { FileList } from "../FileList.js";
+import { FileItem } from "../FileItem";
+import { FileList } from "../FileList";
 
 function makeRef(name: string, size: number): WebFileRef {
 	return {

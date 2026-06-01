@@ -1,4 +1,4 @@
-import type { FileRef, WebFileRef } from "../types.js";
+import type { FileRef, WebFileRef } from "../types";
 
 export function toFileRef(file: File): WebFileRef {
 	return {

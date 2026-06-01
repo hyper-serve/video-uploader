@@ -1,6 +1,6 @@
 import { useContext, useMemo } from "react";
-import { UploadContext } from "../context.js";
-import type { FileState } from "../types.js";
+import { UploadContext } from "../context";
+import type { FileState } from "../types";
 
 export function useFile(fileId: string): FileState | undefined {
 	const context = useContext(UploadContext);

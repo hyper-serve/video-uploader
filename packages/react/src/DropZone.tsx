@@ -1,9 +1,9 @@
 import { toFileRefs, useUpload } from "@hyperserve/video-uploader";
 import type React from "react";
 import { useCallback, useRef, useState } from "react";
-import { filterFilesByAccept } from "./acceptFilter.js";
-import { UploadIcon } from "./icons.js";
-import { colors, radius } from "./theme.js";
+import { filterFilesByAccept } from "./acceptFilter";
+import { UploadIcon } from "./icons";
+import { colors, radius } from "./theme";
 
 export type DropZoneRenderProps = {
 	isDragging: boolean;

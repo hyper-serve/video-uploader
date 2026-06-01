@@ -3,8 +3,8 @@ import type React from "react";
 import { createContext, useContext } from "react";
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { colors, radius } from "./theme.js";
-import { useViewMode, type ViewMode } from "./ViewModeContext.js";
+import { colors, radius } from "./theme";
+import { useViewMode, type ViewMode } from "./ViewModeContext";
 
 export type FileListToolbarStyles = {
 	root?: StyleProp<ViewStyle>;

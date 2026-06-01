@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { UploadContext } from "../context.js";
-import type { UploadContextValue } from "../types.js";
+import { UploadContext } from "../context";
+import type { UploadContextValue } from "../types";
 
 export function useUpload(): UploadContextValue {
 	const context = useContext(UploadContext);

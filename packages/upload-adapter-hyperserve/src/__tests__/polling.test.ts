@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { HyperserveStatusChecker } from "../polling/index.js";
+import { HyperserveStatusChecker } from "../polling/index";
 
 describe("HyperserveStatusChecker", () => {
 	beforeEach(() => {

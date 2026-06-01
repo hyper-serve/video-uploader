@@ -4,7 +4,7 @@ import type React from "react";
 import { useCallback } from "react";
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 import { Pressable, StyleSheet, Text } from "react-native";
-import { colors, radius } from "./theme.js";
+import { colors, radius } from "./theme";
 
 export type FilePickerStyles = {
 	root?: StyleProp<ViewStyle>;

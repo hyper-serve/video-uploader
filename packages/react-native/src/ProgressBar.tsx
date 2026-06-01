@@ -1,7 +1,7 @@
 import type React from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 import { StyleSheet, View } from "react-native";
-import { colors, radius } from "./theme.js";
+import { colors, radius } from "./theme";
 
 export type ProgressBarStyles = {
 	track?: StyleProp<ViewStyle>;

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { FileRef } from "../types.js";
-import { maxDuration } from "../validation/maxDuration.js";
+import type { FileRef } from "../types";
+import { maxDuration } from "../validation/maxDuration";
 
 function makeFileRef(): FileRef {
 	const blob = new Blob(["x"], { type: "video/mp4" });

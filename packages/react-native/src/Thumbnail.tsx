@@ -3,7 +3,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import type { ImageStyle, StyleProp, ViewStyle } from "react-native";
 import { Image, StyleSheet, View } from "react-native";
-import { colors, radius } from "./theme.js";
+import { colors, radius } from "./theme";
 
 export type ThumbnailStyles = {
 	image?: StyleProp<ImageStyle>;

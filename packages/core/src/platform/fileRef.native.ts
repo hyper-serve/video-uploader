@@ -1,4 +1,4 @@
-import type { FileRef, NativeFileRef } from "../types.js";
+import type { FileRef, NativeFileRef } from "../types";
 
 export type DocumentPickerResult = {
 	name: string;

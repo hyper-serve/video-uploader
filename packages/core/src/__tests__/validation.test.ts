@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { FileRef } from "../types.js";
+import type { FileRef } from "../types";
 import {
 	allowedTypes,
 	composeValidators,
 	maxFileSize,
-} from "../validation/index.js";
+} from "../validation/index";
 
 function makeFileRef(
 	overrides: { size?: number; type?: string; name?: string } = {},

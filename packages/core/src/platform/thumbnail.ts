@@ -1,4 +1,4 @@
-import type { FileRef } from "../types.js";
+import type { FileRef } from "../types";
 
 export async function createThumbnail(file: FileRef): Promise<string | null> {
 	if (file.platform === "native") return null;

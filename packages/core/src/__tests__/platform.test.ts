@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { revokeFileRef, toFileRef, toFileRefs } from "../platform/fileRef.js";
-import { createThumbnail, revokeThumbnail } from "../platform/thumbnail.js";
-import type { FileRef } from "../types.js";
+import { revokeFileRef, toFileRef, toFileRefs } from "../platform/fileRef";
+import { createThumbnail, revokeThumbnail } from "../platform/thumbnail";
+import type { FileRef } from "../types";
 
 describe("thumbnail (web)", () => {
 	let listeners: Record<string, (() => void)[]>;

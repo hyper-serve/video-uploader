@@ -4,8 +4,8 @@ import type {
 	StatusUpdateData,
 	UploadResult,
 } from "@hyperserve/video-uploader";
-import type { VideoStatusResult } from "../types.js";
-import { backoffDelay } from "./backoff.js";
+import type { VideoStatusResult } from "../types";
+import { backoffDelay } from "./backoff";
 
 export class HyperserveStatusChecker implements StatusChecker {
 	private getVideoStatus: (videoId: string) => Promise<VideoStatusResult>;

@@ -7,7 +7,7 @@ import type {
 import type {
 	HyperserveAdapterConfig,
 	HyperserveUploadOptions,
-} from "../types.js";
+} from "../types";
 
 export class HyperserveAdapter
 	implements UploadAdapter<HyperserveUploadOptions>

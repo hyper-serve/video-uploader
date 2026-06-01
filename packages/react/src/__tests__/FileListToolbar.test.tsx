@@ -1,8 +1,8 @@
 import type { FileState, WebFileRef } from "@hyperserve/video-uploader";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { FileListToolbar } from "../FileListToolbar.js";
-import { ViewModeProvider } from "../ViewModeContext.js";
+import { FileListToolbar } from "../FileListToolbar";
+import { ViewModeProvider } from "../ViewModeContext";
 
 let mockFiles: FileState[] = [];
 

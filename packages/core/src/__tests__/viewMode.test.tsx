@@ -1,7 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import type React from "react";
 import { describe, expect, it } from "vitest";
-import { useViewMode, ViewModeProvider } from "../viewMode.js";
+import { useViewMode, ViewModeProvider } from "../viewMode";
 
 describe("ViewModeProvider + useViewMode", () => {
 	it("defaults to list mode", () => {

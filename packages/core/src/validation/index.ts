@@ -1,6 +1,6 @@
-import type { FileRef, ValidationResult } from "../types.js";
+import type { FileRef, ValidationResult } from "../types";
 
-export { maxDuration } from "./maxDuration.js";
+export { maxDuration } from "./maxDuration";
 
 export type Validator = (
 	file: FileRef,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { filterFilesByAccept } from "../acceptFilter.js";
+import { filterFilesByAccept } from "../acceptFilter";
 
 function makeFile(name: string, type: string): File {
 	return new File([], name, { type });

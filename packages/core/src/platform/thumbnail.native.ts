@@ -1,4 +1,4 @@
-import type { FileRef } from "../types.js";
+import type { FileRef } from "../types";
 
 type ThumbnailResult = { uri: string };
 type VideoThumbnailsModule = {

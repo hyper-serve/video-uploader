@@ -3,9 +3,9 @@ import { useUpload } from "@hyperserve/video-uploader";
 import type React from "react";
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { FileItem } from "./FileItem.js";
-import { colors } from "./theme.js";
-import { useViewMode, type ViewMode } from "./ViewModeContext.js";
+import { FileItem } from "./FileItem";
+import { colors } from "./theme";
+import { useViewMode, type ViewMode } from "./ViewModeContext";
 
 export type FileListStyles = {
 	root?: StyleProp<ViewStyle>;

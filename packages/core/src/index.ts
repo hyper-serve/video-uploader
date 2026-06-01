@@ -1,18 +1,18 @@
-export { UploadContext, UploadProvider } from "./context.js";
-export { useFile } from "./hooks/useFile.js";
-export { useUpload } from "./hooks/useUpload.js";
-export { revokeFileRef, toFileRef, toFileRefs } from "./platform/fileRef.js";
+export { UploadContext, UploadProvider } from "./context";
+export { useFile } from "./hooks/useFile";
+export { useUpload } from "./hooks/useUpload";
+export { revokeFileRef, toFileRef, toFileRefs } from "./platform/fileRef";
 export {
 	createThumbnail,
 	revokeThumbnail,
-} from "./platform/thumbnail.js";
-export { statusConfig } from "./statusConfig.js";
+} from "./platform/thumbnail";
+export { statusConfig } from "./statusConfig";
 export {
 	colors as themeColors,
 	fontScale as themeFontScale,
 	radius as themeRadius,
 	spacingScale as themeSpacingScale,
-} from "./theme.js";
+} from "./theme";
 export type {
 	ErrorMessages,
 	FileRef,
@@ -28,13 +28,13 @@ export type {
 	UploadResult,
 	ValidationResult,
 	WebFileRef,
-} from "./types.js";
-export type { Validator } from "./validation/index.js";
+} from "./types";
+export type { Validator } from "./validation/index";
 export {
 	allowedTypes,
 	composeValidators,
 	maxDuration,
 	maxFileSize,
-} from "./validation/index.js";
-export type { ViewMode, ViewModeProviderProps } from "./viewMode.js";
-export { useViewMode, ViewModeProvider } from "./viewMode.js";
+} from "./validation/index";
+export type { ViewMode, ViewModeProviderProps } from "./viewMode";
+export { useViewMode, ViewModeProvider } from "./viewMode";

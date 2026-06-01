@@ -1,5 +1,5 @@
 import type React from "react";
-import { colors, radius } from "./theme.js";
+import { colors, radius } from "./theme";
 
 export type ProgressBarStyles = {
 	track?: React.CSSProperties;

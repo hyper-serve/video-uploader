@@ -2,8 +2,8 @@ import type { FileStatus } from "@hyperserve/video-uploader";
 import type React from "react";
 import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
-import { radius } from "./theme.js";
-import { statusConfig } from "./utils.js";
+import { radius } from "./theme";
+import { statusConfig } from "./utils";
 
 export type StatusConfigEntry = {
 	label: string;

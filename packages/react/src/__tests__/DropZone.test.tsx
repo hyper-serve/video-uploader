@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { DropZone } from "../DropZone.js";
+import { DropZone } from "../DropZone";
 
 const addFilesMock = vi.fn();
 let canAddMoreValue = true;

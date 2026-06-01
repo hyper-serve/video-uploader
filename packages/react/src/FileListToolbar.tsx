@@ -1,9 +1,9 @@
 import { useUpload } from "@hyperserve/video-uploader";
 import type React from "react";
 import { createContext, useContext } from "react";
-import { GridIcon, ListIcon } from "./icons.js";
-import { colors, radius } from "./theme.js";
-import { useViewMode, type ViewMode } from "./ViewModeContext.js";
+import { GridIcon, ListIcon } from "./icons";
+import { colors, radius } from "./theme";
+import { useViewMode, type ViewMode } from "./ViewModeContext";
 
 export type FileListToolbarStyles = {
 	root?: React.CSSProperties;

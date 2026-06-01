@@ -1,5 +1,5 @@
-import { colors } from "./theme.js";
-import type { FileStatus } from "./types.js";
+import { colors } from "./theme";
+import type { FileStatus } from "./types";
 
 export const statusConfig: Record<
 	FileStatus,

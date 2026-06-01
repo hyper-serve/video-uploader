@@ -1,9 +1,9 @@
 import type { FileState } from "@hyperserve/video-uploader";
 import { useUpload } from "@hyperserve/video-uploader";
 import type React from "react";
-import { FileItem } from "./FileItem.js";
-import { colors } from "./theme.js";
-import { useViewMode, type ViewMode } from "./ViewModeContext.js";
+import { FileItem } from "./FileItem";
+import { colors } from "./theme";
+import { useViewMode, type ViewMode } from "./ViewModeContext";
 
 export type FileListStyles = {
 	root?: React.CSSProperties;

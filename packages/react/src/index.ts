@@ -2,8 +2,8 @@ export type {
 	DropZoneProps,
 	DropZoneRenderProps,
 	DropZoneStyles,
-} from "./DropZone.js";
-export { DropZone } from "./DropZone.js";
+} from "./DropZone";
+export { DropZone } from "./DropZone";
 export type {
 	ErrorMessageProps,
 	FileItemActionsProps,
@@ -18,18 +18,18 @@ export type {
 	RetryButtonProps,
 	StatusIconProps,
 	UploadProgressProps,
-} from "./FileItem.js";
-export { FileItem } from "./FileItem.js";
-export type { FileListProps, FileListStyles } from "./FileList.js";
-export { FileList } from "./FileList.js";
+} from "./FileItem";
+export { FileItem } from "./FileItem";
+export type { FileListProps, FileListStyles } from "./FileList";
+export { FileList } from "./FileList";
 export type {
 	FileCountProps,
 	FileListToolbarProps,
 	FileListToolbarStyles,
 	ViewToggleProps,
-} from "./FileListToolbar.js";
-export { FileListToolbar } from "./FileListToolbar.js";
-export { formatFileSize, getFileDisplayName } from "./fileFormatters.js";
+} from "./FileListToolbar";
+export { FileListToolbar } from "./FileListToolbar";
+export { formatFileSize, getFileDisplayName } from "./fileFormatters";
 export {
 	CheckCircleIcon,
 	GridIcon,
@@ -38,16 +38,16 @@ export {
 	SpinnerIcon,
 	ThumbnailPlaceholderIcon,
 	UploadIcon,
-} from "./icons.js";
-export type { ProgressBarProps, ProgressBarStyles } from "./ProgressBar.js";
-export { ProgressBar } from "./ProgressBar.js";
+} from "./icons";
+export type { ProgressBarProps, ProgressBarStyles } from "./ProgressBar";
+export { ProgressBar } from "./ProgressBar";
 export type {
 	StatusBadgeProps,
 	StatusBadgeStyles,
 	StatusConfigEntry,
-} from "./StatusBadge.js";
-export { StatusBadge } from "./StatusBadge.js";
-export type { ThumbnailProps, ThumbnailStyles } from "./Thumbnail.js";
-export { Thumbnail } from "./Thumbnail.js";
-export type { ViewMode, ViewModeProviderProps } from "./ViewModeContext.js";
-export { useViewMode, ViewModeProvider } from "./ViewModeContext.js";
+} from "./StatusBadge";
+export { StatusBadge } from "./StatusBadge";
+export type { ThumbnailProps, ThumbnailStyles } from "./Thumbnail";
+export { Thumbnail } from "./Thumbnail";
+export type { ViewMode, ViewModeProviderProps } from "./ViewModeContext";
+export { useViewMode, ViewModeProvider } from "./ViewModeContext";

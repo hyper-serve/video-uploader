@@ -3,12 +3,12 @@ import {
 	revokeFileRef,
 	toFileRef,
 	toFileRefs,
-} from "../platform/fileRef.native.js";
+} from "../platform/fileRef.native";
 import {
 	createThumbnail,
 	revokeThumbnail,
-} from "../platform/thumbnail.native.js";
-import type { FileRef } from "../types.js";
+} from "../platform/thumbnail.native";
+import type { FileRef } from "../types";
 
 describe("thumbnail.native", () => {
 	it("createThumbnail returns null without expo-video-thumbnails", async () => {

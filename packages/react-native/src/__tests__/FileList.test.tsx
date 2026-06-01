@@ -1,7 +1,7 @@
 import type { FileState } from "@hyperserve/video-uploader";
 import { render, screen } from "@testing-library/react-native";
 import { Text, View } from "react-native";
-import { FileList } from "../FileList.js";
+import { FileList } from "../FileList";
 
 let mockFiles: FileState[] = [];
 

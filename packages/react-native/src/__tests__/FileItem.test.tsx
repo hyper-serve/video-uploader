@@ -1,6 +1,6 @@
 import type { FileState } from "@hyperserve/video-uploader";
 import { fireEvent, render, screen } from "@testing-library/react-native";
-import { FileItem } from "../FileItem.js";
+import { FileItem } from "../FileItem";
 
 const mockRemoveFile = jest.fn();
 const mockRetryFile = jest.fn();

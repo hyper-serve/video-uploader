@@ -1,7 +1,7 @@
 import type { FileState } from "@hyperserve/video-uploader";
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import { Text } from "react-native";
-import { FileListToolbar } from "../FileListToolbar.js";
+import { FileListToolbar } from "../FileListToolbar";
 
 let mockFiles: FileState[] = [];
 let mockViewMode = "list";

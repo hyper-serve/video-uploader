@@ -1,12 +1,12 @@
 import { act, renderHook } from "@testing-library/react";
 import type React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { UploadProvider } from "../context.js";
-import { useFile } from "../hooks/useFile.js";
-import { useUpload } from "../hooks/useUpload.js";
-import type { FileRef, UploadConfig, UploadResult } from "../types.js";
+import { UploadProvider } from "../context";
+import { useFile } from "../hooks/useFile";
+import { useUpload } from "../hooks/useUpload";
+import type { FileRef, UploadConfig, UploadResult } from "../types";
 
-vi.mock("../platform/thumbnail.js", () => ({
+vi.mock("../platform/thumbnail", () => ({
 	createThumbnail: vi.fn().mockResolvedValue(null),
 	revokeThumbnail: vi.fn(),
 }));

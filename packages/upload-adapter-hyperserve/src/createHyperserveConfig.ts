@@ -5,13 +5,13 @@ import type {
 	UploadConfig,
 	ValidationResult,
 } from "@hyperserve/video-uploader";
-import { HyperserveAdapter } from "./adapter/hyperserve.js";
-import { HyperserveStatusChecker } from "./polling/index.js";
+import { HyperserveAdapter } from "./adapter/hyperserve";
+import { HyperserveStatusChecker } from "./polling/index";
 import type {
 	HyperserveAdapterConfig,
 	HyperserveUploadOptions,
 	VideoStatusResult,
-} from "./types.js";
+} from "./types";
 
 export type HyperserveConfig = HyperserveAdapterConfig & {
 	/**

@@ -10,9 +10,9 @@ import {
 	Text,
 	View,
 } from "react-native";
-import { ProgressBar } from "./ProgressBar.js";
-import { Thumbnail } from "./Thumbnail.js";
-import { colors, radius } from "./theme.js";
+import { ProgressBar } from "./ProgressBar";
+import { Thumbnail } from "./Thumbnail";
+import { colors, radius } from "./theme";
 
 export type FileItemStyles = {
 	root?: StyleProp<ViewStyle>;

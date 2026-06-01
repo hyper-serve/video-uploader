@@ -1,6 +1,6 @@
 import type { FileState } from "@hyperserve/video-uploader";
 import { describe, expect, it } from "vitest";
-import { formatFileSize, getFileDisplayName } from "../fileFormatters.js";
+import { formatFileSize, getFileDisplayName } from "../fileFormatters";
 
 describe("formatFileSize", () => {
 	it("returns KB for files under 1MB", () => {

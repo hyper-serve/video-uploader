@@ -1,8 +1,8 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { useUpload } from "../hooks/useUpload.js";
+import { useUpload } from "../hooks/useUpload";
 
-vi.mock("../platform/thumbnail.js", () => ({
+vi.mock("../platform/thumbnail", () => ({
 	createThumbnail: vi.fn().mockResolvedValue(null),
 	revokeThumbnail: vi.fn(),
 }));

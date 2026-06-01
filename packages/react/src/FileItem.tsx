@@ -2,11 +2,11 @@ import type { FileState } from "@hyperserve/video-uploader";
 import { useUpload } from "@hyperserve/video-uploader";
 import type React from "react";
 import { createContext, useContext } from "react";
-import { formatFileSize } from "./fileFormatters.js";
-import { CheckCircleIcon, RetryIcon, SpinnerIcon } from "./icons.js";
-import { ProgressBar } from "./ProgressBar.js";
-import { Thumbnail } from "./Thumbnail.js";
-import { colors, radius } from "./theme.js";
+import { formatFileSize } from "./fileFormatters";
+import { CheckCircleIcon, RetryIcon, SpinnerIcon } from "./icons";
+import { ProgressBar } from "./ProgressBar";
+import { Thumbnail } from "./Thumbnail";
+import { colors, radius } from "./theme";
 
 export type FileItemStyles = {
 	root?: React.CSSProperties;

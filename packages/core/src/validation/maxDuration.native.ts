@@ -1,4 +1,4 @@
-import type { FileRef, ValidationResult } from "../types.js";
+import type { FileRef, ValidationResult } from "../types";
 
 type VideoInfo = { duration?: number };
 type VideoMetadataModule = {

@@ -12,28 +12,28 @@ export type {
 	RetryButtonProps,
 	StatusIconProps,
 	UploadProgressProps,
-} from "./FileItem.js";
-export { FileItem } from "./FileItem.js";
-export type { FileListProps, FileListStyles } from "./FileList.js";
-export { FileList } from "./FileList.js";
+} from "./FileItem";
+export { FileItem } from "./FileItem";
+export type { FileListProps, FileListStyles } from "./FileList";
+export { FileList } from "./FileList";
 export type {
 	FileCountProps,
 	FileListToolbarProps,
 	FileListToolbarStyles,
 	ViewToggleProps,
-} from "./FileListToolbar.js";
-export { FileListToolbar } from "./FileListToolbar.js";
-export type { FilePickerProps, FilePickerStyles } from "./FilePicker.js";
-export { FilePicker } from "./FilePicker.js";
-export type { ProgressBarProps, ProgressBarStyles } from "./ProgressBar.js";
-export { ProgressBar } from "./ProgressBar.js";
+} from "./FileListToolbar";
+export { FileListToolbar } from "./FileListToolbar";
+export type { FilePickerProps, FilePickerStyles } from "./FilePicker";
+export { FilePicker } from "./FilePicker";
+export type { ProgressBarProps, ProgressBarStyles } from "./ProgressBar";
+export { ProgressBar } from "./ProgressBar";
 export type {
 	StatusBadgeProps,
 	StatusBadgeStyles,
 	StatusConfigEntry,
-} from "./StatusBadge.js";
-export { StatusBadge } from "./StatusBadge.js";
-export type { ThumbnailProps, ThumbnailStyles } from "./Thumbnail.js";
-export { Thumbnail } from "./Thumbnail.js";
-export type { ViewMode, ViewModeProviderProps } from "./ViewModeContext.js";
-export { useViewMode, ViewModeProvider } from "./ViewModeContext.js";
+} from "./StatusBadge";
+export { StatusBadge } from "./StatusBadge";
+export type { ThumbnailProps, ThumbnailStyles } from "./Thumbnail";
+export { Thumbnail } from "./Thumbnail";
+export type { ViewMode, ViewModeProviderProps } from "./ViewModeContext";
+export { useViewMode, ViewModeProvider } from "./ViewModeContext";

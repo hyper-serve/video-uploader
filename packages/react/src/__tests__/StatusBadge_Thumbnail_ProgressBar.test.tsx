@@ -1,9 +1,9 @@
 import type { FileState } from "@hyperserve/video-uploader";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { ProgressBar } from "../ProgressBar.js";
-import { StatusBadge } from "../StatusBadge.js";
-import { Thumbnail } from "../Thumbnail.js";
+import { ProgressBar } from "../ProgressBar";
+import { StatusBadge } from "../StatusBadge";
+import { Thumbnail } from "../Thumbnail";
 
 describe("StatusBadge", () => {
 	it("uses default config for status and renders label", () => {

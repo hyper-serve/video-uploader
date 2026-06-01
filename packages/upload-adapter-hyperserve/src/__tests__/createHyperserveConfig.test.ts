@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import { HyperserveAdapter } from "../adapter/hyperserve.js";
-import { createHyperserveConfig } from "../createHyperserveConfig.js";
-import { HyperserveStatusChecker } from "../polling/index.js";
+import { HyperserveAdapter } from "../adapter/hyperserve";
+import { createHyperserveConfig } from "../createHyperserveConfig";
+import { HyperserveStatusChecker } from "../polling/index";
 
 vi.mock("@hyperserve/hyperserve-js/browser", () => ({
 	putVideoToStorage: vi.fn(),

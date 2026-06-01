@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { FileRef } from "../types.js";
-import { maxDuration } from "../validation/maxDuration.native.js";
+import type { FileRef } from "../types";
+import { maxDuration } from "../validation/maxDuration.native";
 
 function makeFileRef(): FileRef {
 	return {
