@@ -15,6 +15,7 @@ The adapter packages use the `.native.ts` convention. Metro resolves `foo.js` to
 | `platform/fileRef` | `File` → `FileRef` with `raw` | `DocumentPickerResult` → `FileRef` with `uri` |
 | `platform/thumbnail` | `URL.createObjectURL` | `expo-video-thumbnails` or `null` |
 | `validation/maxDuration` | DOM video element | `expo-video-metadata` (skips if missing) |
+| `Thumbnail` playback | DOM `<video>` element | `expo-video` `VideoView` (falls back to thumbnail image) |
 
 ## FileRef
 

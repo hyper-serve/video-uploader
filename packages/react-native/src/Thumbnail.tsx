@@ -3,6 +3,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import type { ImageStyle, StyleProp, ViewStyle } from "react-native";
 import { Image, StyleSheet, View } from "react-native";
+import { type ExpoVideoModule, getExpoVideo } from "./expoVideo";
 import { colors, radius } from "./theme";
 
 export type ThumbnailStyles = {
@@ -12,6 +13,8 @@ export type ThumbnailStyles = {
 
 export type ThumbnailProps = {
 	file: FileState;
+	playback?: boolean;
+	controls?: boolean;
 	style?: StyleProp<ImageStyle>;
 	placeholderStyle?: StyleProp<ViewStyle>;
 	placeholder?: React.ReactNode;
@@ -25,6 +28,8 @@ export type ThumbnailProps = {
 
 export function Thumbnail({
 	file,
+	playback = false,
+	controls = true,
 	style,
 	placeholderStyle,
 	placeholder,
@@ -48,6 +53,21 @@ export function Thumbnail({
 				})}
 			</>
 		);
+	}
+
+	if (playback && isReady && file.playbackUrl) {
+		const expoVideo = getExpoVideo();
+		if (expoVideo) {
+			return (
+				<PlaybackVideo
+					controls={controls}
+					expoVideo={expoVideo}
+					slotStyle={slots?.image}
+					source={file.playbackUrl}
+					style={style}
+				/>
+			);
+		}
 	}
 
 	if (file.thumbnailUri && !thumbnailLoadFailed) {
@@ -78,6 +98,33 @@ export function Thumbnail({
 				</View>
 			)}
 		</View>
+	);
+}
+
+type PlaybackVideoProps = {
+	expoVideo: ExpoVideoModule;
+	source: string;
+	controls: boolean;
+	style?: StyleProp<ImageStyle>;
+	slotStyle?: StyleProp<ImageStyle>;
+};
+
+function PlaybackVideo({
+	expoVideo,
+	source,
+	controls,
+	style,
+	slotStyle,
+}: PlaybackVideoProps) {
+	const { VideoView, useVideoPlayer } = expoVideo;
+	const player = useVideoPlayer(source);
+	return (
+		<VideoView
+			contentFit="contain"
+			nativeControls={controls}
+			player={player}
+			style={StyleSheet.flatten([styles.image, slotStyle, style])}
+		/>
 	);
 }
 

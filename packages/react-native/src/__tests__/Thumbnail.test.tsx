@@ -63,6 +63,23 @@ describe("Thumbnail (native)", () => {
 		});
 	});
 
+	it("falls back to the Image when playback is enabled but expo-video is unavailable", () => {
+		const file: FileState = {
+			...baseFile,
+			playbackUrl: "https://cdn.example.com/video.m3u8",
+			status: "ready",
+			thumbnailUri: "file:///thumb.jpg",
+		};
+		// expo-video is not installed in this package; the require fails and the
+		// component warns once before falling back to the thumbnail image.
+		const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+		const { UNSAFE_getByType } = render(<Thumbnail file={file} playback />);
+		expect(UNSAFE_getByType(Image).props.source).toEqual({
+			uri: "file:///thumb.jpg",
+		});
+		warn.mockRestore();
+	});
+
 	it("styles.placeholder is applied to the placeholder View", () => {
 		const { UNSAFE_getByType } = render(
 			<Thumbnail

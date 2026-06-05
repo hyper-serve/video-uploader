@@ -72,12 +72,13 @@ The core package is always required. Pick the UI package for your platform, or u
 
 ### Optional native dependencies
 
-All three are optional peer dependencies. The library gracefully degrades without them.
+These are optional peer dependencies. The library gracefully degrades without them.
 
 | Package | Purpose | Without it |
 |---------|---------|------------|
 | `expo-video-metadata` | `maxDuration` validation | Skips validation, warns once |
 | `expo-video-thumbnails` | Thumbnail generation | `thumbnailUri` stays `null` |
+| `expo-video` | In-app playback of ready videos | Falls back to the thumbnail image |
 | `react-native-background-upload` | True background upload with progress | Falls back to `fetch` with estimated progress |
 
 <LinkCard

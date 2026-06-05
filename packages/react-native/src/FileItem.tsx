@@ -274,11 +274,13 @@ function UploadProgress({ trackStyle, fillStyle }: UploadProgressProps) {
 }
 
 export type PlaybackPreviewProps = {
-	style?: StyleProp<ViewStyle>;
+	style?: StyleProp<ImageStyle>;
 };
 
-function PlaybackPreview(_props: PlaybackPreviewProps) {
-	return null;
+function PlaybackPreview({ style }: PlaybackPreviewProps) {
+	const { file, styles: slots } = useFileItemContext();
+	if (file.status !== "ready" || !file.playbackUrl) return null;
+	return <Thumbnail file={file} playback style={[slots.thumbnail, style]} />;
 }
 
 export type FileItemContentProps = {
@@ -292,7 +294,11 @@ function Content({ style }: FileItemContentProps) {
 	if (isRow) {
 		return (
 			<>
-				<Thumbnail file={file} style={[styles.thumbnailRow, slots.thumbnail]} />
+				<Thumbnail
+					file={file}
+					playback
+					style={[styles.thumbnailRow, slots.thumbnail]}
+				/>
 				<View style={[styles.middle, slots.contentInner, style]}>
 					<FileName style={styles.fileNameFlex} />
 					<Meta>
@@ -312,7 +318,7 @@ function Content({ style }: FileItemContentProps) {
 
 	return (
 		<View style={[slots.contentInner, style]}>
-			<Thumbnail file={file} style={slots.thumbnail} />
+			<Thumbnail file={file} playback style={slots.thumbnail} />
 			<View style={styles.nameRow}>
 				<FileName style={styles.fileNameFlex} />
 				<Actions>

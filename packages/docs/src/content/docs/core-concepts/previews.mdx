@@ -21,7 +21,7 @@ Use the `Thumbnail` component's `playback` prop to switch from thumbnail to vide
 <Thumbnail file={file} playback />
 ```
 
-With `playback` set, the component renders a thumbnail image during upload, falls back to that thumbnail at `ready` if no `playbackUrl` exists, and transitions to a `<video>` element once a `playbackUrl` is set.
+With `playback` set, the component renders a thumbnail image during upload, falls back to that thumbnail at `ready` if no `playbackUrl` exists, and transitions to the player once a `playbackUrl` is set. On web this is a `<video>` element; on React Native it is `expo-video`'s `VideoView`.
 
 ## Lifecycle
 
@@ -37,6 +37,8 @@ The local thumbnail blob URL is revoked only on `removeFile` and provider unmoun
 ## Platform support
 
 Thumbnail generation on React Native requires the optional `expo-video-thumbnails` package. If it is not installed, `thumbnailUri` is always `null` and a placeholder is shown.
+
+In-app playback on React Native requires the optional `expo-video` package. If it is not installed, the `playback` prop falls back to the thumbnail image.
 
 ## See also
 

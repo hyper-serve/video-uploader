@@ -2,13 +2,11 @@ import {
 	allowedTypes,
 	composeValidators,
 	type FileRef,
-	type FileState,
 	maxDuration,
 	maxFileSize,
 } from "@hyperserve/video-uploader";
 import { createHyperserveConfig } from "@hyperserve/video-uploader-adapter-hyperserve";
 import * as DocumentPicker from "expo-document-picker";
-import { useVideoPlayer, VideoView } from "expo-video";
 
 const SERVER_URL =
 	process.env.EXPO_PUBLIC_SERVER_URL ?? "http://localhost:3001";
@@ -46,7 +44,7 @@ export const demoConfig = createHyperserveConfig({
 	},
 	uploadOptions: {
 		isPublic: true,
-		resolutions: ["240p", "480p", "720p"],
+		resolutions: ["480p", "720p"],
 	},
 	validate,
 });
@@ -66,25 +64,4 @@ export async function pickVideos(): Promise<FileRef[]> {
 			type: asset.mimeType ?? "video/mp4",
 			uri: asset.uri,
 		}));
-}
-
-export function Playback({ file }: { file: FileState }) {
-	const player = useVideoPlayer(
-		file.status === "ready" && file.playbackUrl ? file.playbackUrl : null,
-	);
-
-	if (file.status !== "ready" || !file.playbackUrl) return null;
-	return (
-		<VideoView
-			contentFit="contain"
-			nativeControls
-			player={player}
-			style={{
-				backgroundColor: "#000",
-				borderRadius: 8,
-				height: 180,
-				width: "100%",
-			}}
-		/>
-	);
 }

@@ -48,6 +48,8 @@ import { Thumbnail } from "@hyperserve/video-uploader-react";
 - When `playback` is true and the file is `ready`, renders a `<video>` element with the `playbackUrl`
 - Shows a placeholder icon when no thumbnail is available
 
+On React Native, the same `playback` and `controls` props apply, but the player is rendered with [`expo-video`](https://docs.expo.dev/versions/latest/sdk/video/)'s `VideoView`. `expo-video` is an optional peer dependency; when it is not installed, the component falls back to the thumbnail image.
+
 ## Slots
 
 Pass a `styles` slot map to theme internal elements. Slots merge over defaults; local `style`/`placeholderStyle` props win over slots. See [Theming](/core-concepts/theming/) for the canonical merge-order explanation.
