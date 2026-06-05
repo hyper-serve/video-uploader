@@ -8,7 +8,7 @@
 		"start": "next start"
 	},
 	"dependencies": {
-		"@hyperserve/hyperserve-js": "^0.1.0",
+		"@hyperserve/hyperserve-js": "^0.1.1",
 		"@hyperserve/video-uploader": "workspace:*",
 		"@hyperserve/video-uploader-adapter-hyperserve": "workspace:*",
 		"@hyperserve/video-uploader-react": "workspace:*",

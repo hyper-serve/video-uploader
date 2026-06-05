@@ -41,7 +41,7 @@ function makeConfig() {
 			if (!r.ok) throw new Error(`Status check failed: ${r.status}`);
 			return r.json();
 		},
-		uploadOptions: { isPublic: true, resolutions: ["480p", "1080p"] },
+		uploadOptions: { isPublic: true, resolutions: ["480p", "720p"] },
 		validate: composeValidators(
 			maxFileSize(500 * 1024 * 1024),
 			allowedTypes(["video/*"]),

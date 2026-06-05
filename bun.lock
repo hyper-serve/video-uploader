@@ -14,7 +14,7 @@
       "name": "@hyperserve/video-uploader-example-react-native",
       "version": "0.0.1",
       "dependencies": {
-        "@hyperserve/hyperserve-js": "^0.1.0",
+        "@hyperserve/hyperserve-js": "^0.1.1",
         "@hyperserve/video-uploader": "workspace:*",
         "@hyperserve/video-uploader-adapter-hyperserve": "workspace:*",
         "@hyperserve/video-uploader-react-native": "workspace:*",
@@ -39,7 +39,7 @@
       "name": "@hyperserve/video-uploader-example-web",
       "version": "0.0.1",
       "dependencies": {
-        "@hyperserve/hyperserve-js": "^0.1.0",
+        "@hyperserve/hyperserve-js": "^0.1.1",
         "@hyperserve/video-uploader": "workspace:*",
         "@hyperserve/video-uploader-adapter-hyperserve": "workspace:*",
         "@hyperserve/video-uploader-react": "workspace:*",
@@ -119,7 +119,7 @@
     },
     "packages/react-native": {
       "name": "@hyperserve/video-uploader-react-native",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "devDependencies": {
         "@hyperserve/video-uploader": "workspace:*",
         "@react-native/babel-preset": "^0.84.1",
@@ -135,15 +135,19 @@
       },
       "peerDependencies": {
         "@hyperserve/video-uploader": "workspace:^",
+        "expo-video": ">=2.0.0",
         "react": ">=18.0.0",
         "react-native": ">=0.73.0",
       },
+      "optionalPeers": [
+        "expo-video",
+      ],
     },
     "packages/upload-adapter-hyperserve": {
       "name": "@hyperserve/video-uploader-adapter-hyperserve",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "dependencies": {
-        "@hyperserve/hyperserve-js": "^0.1.0",
+        "@hyperserve/hyperserve-js": "^0.1.1",
       },
       "devDependencies": {
         "@hyperserve/video-uploader": "workspace:*",
@@ -535,7 +539,7 @@
 
     "@expressive-code/plugin-text-markers": ["@expressive-code/plugin-text-markers@0.41.7", "", { "dependencies": { "@expressive-code/core": "^0.41.7" } }, "sha512-Ewpwuc5t6eFdZmWlFyeuy3e1PTQC0jFvw2Q+2bpcWXbOZhPLsT7+h8lsSIJxb5mS7wZko7cKyQ2RLYDyK6Fpmw=="],
 
-    "@hyperserve/hyperserve-js": ["@hyperserve/hyperserve-js@0.1.0", "", {}, "sha512-I8oBQ1f1CpK7wrV35+NcUVCEt26+JWwHJsgKOtEDLBQAz2fXH9a6trkLlqu2iauq1LmFSAuLT5jHbhljTAxcbQ=="],
+    "@hyperserve/hyperserve-js": ["@hyperserve/hyperserve-js@0.1.1", "", {}, "sha512-bF6slF5NQ+Po6GK4HqPucC15HOXUIjcD3hGOkDhofTggWW0eteO/LgMZnc+M3r/jnHmkpJIBPG4vHHG0Rxk2xw=="],
 
     "@hyperserve/video-uploader": ["@hyperserve/video-uploader@workspace:packages/core"],
 
