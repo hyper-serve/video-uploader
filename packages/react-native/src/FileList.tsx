@@ -1,7 +1,12 @@
 import type { FileState } from "@hyperserve/video-uploader";
 import { useUpload } from "@hyperserve/video-uploader";
 import type React from "react";
-import type { StyleProp, TextStyle, ViewStyle } from "react-native";
+import type {
+	DimensionValue,
+	StyleProp,
+	TextStyle,
+	ViewStyle,
+} from "react-native";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { FileItem } from "./FileItem";
 import { colors } from "./theme";
@@ -49,6 +54,12 @@ export function FileList({
 	}
 
 	const renderItem = children ?? makeDefaultRenderItem(resolvedMode);
+	// Cap each cell to one column's width so a lone item in the final row does
+	// not stretch to fill the whole row (FlatList's default flex behavior).
+	const gridItemStyle =
+		resolvedMode === "grid"
+			? [styles.gridItem, { maxWidth: `${100 / columns}%` as DimensionValue }]
+			: undefined;
 
 	return (
 		<FlatList
@@ -58,9 +69,7 @@ export function FileList({
 			keyExtractor={(item) => item.id}
 			numColumns={resolvedMode === "grid" ? columns : 1}
 			renderItem={({ item, index }) => (
-				<View style={resolvedMode === "grid" ? styles.gridItem : undefined}>
-					{renderItem(item, index)}
-				</View>
+				<View style={gridItemStyle}>{renderItem(item, index)}</View>
 			)}
 		/>
 	);

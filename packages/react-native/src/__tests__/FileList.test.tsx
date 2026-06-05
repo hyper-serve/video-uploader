@@ -76,6 +76,23 @@ describe("FileList (native)", () => {
 		expect(screen.getByText("x.mp4")).toBeTruthy();
 	});
 
+	it("grid mode caps every item to one column width so a lone item does not stretch", () => {
+		mockFiles = [makeFile("a"), makeFile("b"), makeFile("c")];
+		const { UNSAFE_getAllByType } = render(<FileList mode="grid" />);
+
+		const flatten = (s: unknown): Record<string, unknown> =>
+			Object.assign({}, ...(Array.isArray(s) ? s.flat() : [s]).filter(Boolean));
+		const gridWrappers = UNSAFE_getAllByType(View).filter((v) => {
+			const f = flatten(v.props.style);
+			return f.flex === 1 && f.maxWidth !== undefined;
+		});
+
+		expect(gridWrappers).toHaveLength(3);
+		for (const w of gridWrappers) {
+			expect(flatten(w.props.style).maxWidth).toBe("50%");
+		}
+	});
+
 	it("styles.empty applies to empty wrapper View", () => {
 		const { UNSAFE_getAllByType } = render(
 			<FileList
