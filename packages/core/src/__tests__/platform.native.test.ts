@@ -4,10 +4,7 @@ import {
 	toFileRef,
 	toFileRefs,
 } from "../platform/fileRef.native";
-import {
-	createThumbnail,
-	revokeThumbnail,
-} from "../platform/thumbnail.native";
+import { createThumbnail, revokeThumbnail } from "../platform/thumbnail.native";
 import type { FileRef } from "../types";
 
 describe("thumbnail.native", () => {
