@@ -6,6 +6,7 @@ export const statusConfig: Record<
 	{ bg: string; label: string; text: string }
 > = {
 	failed: { bg: "#fef2f2", label: "Failed", text: colors.error },
+	preparing: { bg: "#eff6ff", label: "Preparing", text: colors.accent },
 	processing: { bg: "#fffbeb", label: "Processing", text: "#d97706" },
 	ready: { bg: "#f0fdf4", label: "Ready", text: "#16a34a" },
 	selected: {

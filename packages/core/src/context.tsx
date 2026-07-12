@@ -173,20 +173,33 @@ export function UploadProvider<TOptions>({
 			dispatchWithStatusTracking({
 				id: file.id,
 				type: "UPDATE_FILE",
-				updates: { status: "uploading" },
+				updates: { status: "preparing" },
 			});
 
 			try {
+				// The first onProgress means bytes are flowing: flip preparing ->
+				// uploading (a status change). Subsequent calls only move progress.
+				let transferStarted = false;
 				const uploadResult = await cfg.adapter.upload(
 					file.ref,
 					cfg.uploadOptions,
 					{
-						onProgress: (pct) =>
-							dispatch({
-								id: file.id,
-								type: "UPDATE_FILE",
-								updates: { progress: pct },
-							}),
+						onProgress: (pct) => {
+							if (!transferStarted) {
+								transferStarted = true;
+								dispatchWithStatusTracking({
+									id: file.id,
+									type: "UPDATE_FILE",
+									updates: { progress: pct, status: "uploading" },
+								});
+							} else {
+								dispatch({
+									id: file.id,
+									type: "UPDATE_FILE",
+									updates: { progress: pct },
+								});
+							}
+						},
 					},
 					ac.signal,
 				);
@@ -290,7 +303,10 @@ export function UploadProvider<TOptions>({
 		const currentFiles = filesRef.current;
 		const maxConcurrent = configRef.current.maxConcurrentUploads ?? 3;
 		const activeCount = currentFiles.filter(
-			(f) => f.status === "validating" || f.status === "uploading",
+			(f) =>
+				f.status === "validating" ||
+				f.status === "preparing" ||
+				f.status === "uploading",
 		).length;
 		const slotsAvailable = maxConcurrent - activeCount;
 
@@ -432,7 +448,10 @@ export function UploadProvider<TOptions>({
 	const maxFiles = configRef.current.maxFiles;
 	const canAddMore = maxFiles == null || files.length < maxFiles;
 	const isUploading = files.some(
-		(f) => f.status === "uploading" || f.status === "validating",
+		(f) =>
+			f.status === "uploading" ||
+			f.status === "validating" ||
+			f.status === "preparing",
 	);
 	const hasErrors = files.some((f) => f.status === "failed");
 	const allReady = files.length > 0 && files.every((f) => f.status === "ready");

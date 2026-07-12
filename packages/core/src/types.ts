@@ -20,6 +20,7 @@ export type FileRef = NativeFileRef | WebFileRef;
 export type FileStatus =
 	| "selected"
 	| "validating"
+	| "preparing"
 	| "uploading"
 	| "processing"
 	| "ready"
