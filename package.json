@@ -6,7 +6,7 @@
 		"examples/*"
 	],
 	"scripts": {
-		"build": "bun run --filter '@hyperserve/*' build",
+		"build": "bun run --filter '@hyperserve/video-uploader' build && bun run --filter '@hyperserve/*' build",
 		"build:watch": "bun run --filter '@hyperserve/*' build:watch",
 		"test": "bun run --filter '@hyperserve/video-uploader' test && bun run --filter '@hyperserve/video-uploader-adapter-hyperserve' test && bun run --filter '@hyperserve/video-uploader-react' test && bun run --filter '@hyperserve/video-uploader-react-native' test",
 		"test:watch": "bun run --filter '@hyperserve/video-uploader' test:watch",
