@@ -1,6 +1,6 @@
 {
 	"name": "@hyperserve/video-uploader-adapter-hyperserve",
-	"version": "0.1.2",
+	"version": "0.1.3-rc.0",
 	"author": "Ryan Trann",
 	"description": "Hyperserve adapter for @hyperserve/video-uploader",
 	"license": "MIT",
@@ -38,7 +38,7 @@
 		"@hyperserve/hyperserve-js": "^0.1.1"
 	},
 	"peerDependencies": {
-		"@hyperserve/video-uploader": "^0.1.2",
+		"@hyperserve/video-uploader": "^0.1.1",
 		"react-native-background-upload": ">=6.0.0"
 	},
 	"peerDependenciesMeta": {
