@@ -11,6 +11,8 @@
 		"test": "bun run --filter '@hyperserve/video-uploader' test && bun run --filter '@hyperserve/video-uploader-adapter-hyperserve' test && bun run --filter '@hyperserve/video-uploader-react' test && bun run --filter '@hyperserve/video-uploader-react-native' test",
 		"test:watch": "bun run --filter '@hyperserve/video-uploader' test:watch",
 		"typecheck": "bun run --filter '@hyperserve/*' typecheck",
+		"check:publish": "bun run scripts/check-publish-manifests.ts",
+		"publish:changed": "bun run scripts/publish-changed.ts",
 		"format:check": "biome format",
 		"format:write": "biome format --write",
 		"lint:check": "biome check",

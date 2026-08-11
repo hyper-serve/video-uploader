@@ -19,7 +19,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/hyper-serve/video-uploader.git",
+		"url": "git+https://github.com/hyper-serve/video-uploader.git",
 		"directory": "packages/upload-adapter-hyperserve"
 	},
 	"publishConfig": {
@@ -38,7 +38,7 @@
 		"@hyperserve/hyperserve-js": "^0.1.1"
 	},
 	"peerDependencies": {
-		"@hyperserve/video-uploader": "workspace:^",
+		"@hyperserve/video-uploader": "^0.1.2",
 		"react-native-background-upload": ">=6.0.0"
 	},
 	"peerDependenciesMeta": {
