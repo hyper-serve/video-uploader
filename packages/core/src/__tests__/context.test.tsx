@@ -410,6 +410,49 @@ describe("UploadProvider + useUpload", () => {
 		expect(result.current.files[0].progress).toBe(42);
 	});
 
+	it("ignores a late onProgress from an aborted upload after retry", async () => {
+		const captured: Array<(pct: number) => void> = [];
+		const adapter: UploadAdapter = {
+			upload: vi.fn((_file, _opts, callbacks, signal) => {
+				captured.push(callbacks.onProgress);
+				return new Promise<UploadResult>((_resolve, reject) => {
+					signal.addEventListener("abort", () =>
+						reject(new DOMException("Aborted", "AbortError")),
+					);
+				});
+			}),
+		};
+		const { result } = renderHook(() => useUpload(), {
+			wrapper: makeWrapper(makeConfig({ adapter })),
+		});
+
+		act(() => {
+			result.current.addFiles([makeFileRef()]);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
+		expect(result.current.files[0].status).toBe("preparing");
+
+		// Retry aborts the first upload and re-enqueues; a second upload starts.
+		act(() => {
+			result.current.retryFile(result.current.files[0].id);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
+		expect(result.current.files[0].status).toBe("preparing");
+		expect(captured).toHaveLength(2);
+
+		// A late onProgress from the FIRST (aborted) upload must not resurrect
+		// the file's status or apply stale progress.
+		act(() => {
+			captured[0](42);
+		});
+		expect(result.current.files[0].status).toBe("preparing");
+		expect(result.current.files[0].progress).toBe(0);
+	});
+
 	it("counts a preparing file toward isUploading", async () => {
 		const adapter: UploadAdapter = {
 			upload: vi.fn(() => new Promise<UploadResult>(() => {})),

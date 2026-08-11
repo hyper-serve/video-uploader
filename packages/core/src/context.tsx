@@ -185,20 +185,22 @@ export function UploadProvider<TOptions>({
 					cfg.uploadOptions,
 					{
 						onProgress: (pct) => {
-							if (!transferStarted) {
-								transferStarted = true;
-								dispatchWithStatusTracking({
-									id: file.id,
-									type: "UPDATE_FILE",
-									updates: { progress: pct, status: "uploading" },
-								});
-							} else {
-								dispatch({
-									id: file.id,
-									type: "UPDATE_FILE",
-									updates: { progress: pct },
-								});
-							}
+							// A stale callback from an aborted upload (retry/remove)
+							// must not resurrect this file's status or progress.
+							if (ac.signal.aborted) return;
+							// First byte-progress flips preparing -> uploading (a status
+							// change); later calls only move progress. A progress-only
+							// update never bumps status tracking, so one dispatch covers
+							// both cases.
+							const startingTransfer = !transferStarted;
+							transferStarted = true;
+							dispatchWithStatusTracking({
+								id: file.id,
+								type: "UPDATE_FILE",
+								updates: startingTransfer
+									? { progress: pct, status: "uploading" }
+									: { progress: pct },
+							});
 						},
 					},
 					ac.signal,
