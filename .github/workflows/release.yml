@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never let two releases race the registry.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # `push` is gated to main, but `workflow_dispatch` runs against whatever ref
+    # the operator selects. Publishing is irreversible and npm never lets a
+    # version number be reused, so refuse to publish from anything but main.
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      # Mints the OIDC token npm exchanges for publish rights. Trusted
+      # publishing means there is no NPM_TOKEN to leak or rotate, and it is the
+      # only mechanism that satisfies the account's require-2FA-on-write setting
+      # without a human typing a one-time password.
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm >= 11.5.1; no Node release ships one yet.
+      - name: Upgrade npm
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check publish manifests
+        run: bun run check:publish
+
+      - name: Build
+        run: bun run build
+
+      # ci.yml runs on pull_request only, so an admin merge or a direct push to
+      # main would otherwise reach npm through a weaker gate than a PR does.
+      - name: Type check
+        run: bun run typecheck
+
+      - name: Lint
+        run: bun run lint:check
+
+      - name: Format
+        run: bun run format:check
+
+      - name: Test
+        run: bun run test
+
+      - name: Publish packages whose version is not yet on npm
+        run: bun run publish:changed
