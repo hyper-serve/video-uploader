@@ -70,6 +70,10 @@ for (const { dir, manifest } of publishable) {
 
 	console.log(`publish ${spec}`);
 	const command = ["npm", "publish", "--access", "public"];
+	// npm tags every publish `latest` unless told otherwise, which would point
+	// consumers at a prerelease. Anything with a `-1.2.3-rc.0` suffix goes out
+	// under `next` instead.
+	if (manifest.version.includes("-")) command.push("--tag", "next");
 	if (provenance) command.push("--provenance");
 	if (otp !== undefined) command.push(otp);
 
