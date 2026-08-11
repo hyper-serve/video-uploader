@@ -12,6 +12,7 @@
  */
 
 import { join } from "node:path";
+import { findManifestProblems } from "./check-publish-manifests";
 import { ROOT, readWorkspacePackages, topologicalOrder } from "./workspace";
 
 const dryRun = process.argv.includes("--dry-run");
@@ -45,12 +46,45 @@ function isAlreadyPublished(name: string, version: string) {
 			stdout: "pipe",
 		},
 	);
-	return result.exitCode === 0 && result.stdout.toString().trim() !== "";
+
+	if (result.exitCode === 0) {
+		return result.stdout.toString().trim() !== "";
+	}
+
+	// E404 is the only failure that genuinely means "not published yet". A 429,
+	// a registry 5xx, or an ENEEDAUTH must not be read as an absent version, or
+	// the script publishes over a live one and npm rejects it with E403.
+	const stderr = result.stderr.toString();
+	if (stderr.includes("E404")) {
+		return false;
+	}
+
+	throw new Error(
+		`Could not determine whether ${name}@${version} is published:\n${stderr.trim()}`,
+	);
 }
 
 const packages = await readWorkspacePackages();
+
+// The local `--otp=` path would otherwise be the one publish route with no
+// manifest gate, which is exactly the route that shipped the original
+// EUNSUPPORTEDPROTOCOL break.
+const problems = findManifestProblems(packages);
+if (problems.length > 0) {
+	console.error(
+		`Refusing to publish, manifest preflight failed with ${problems.length} problem(s):\n`,
+	);
+	for (const problem of problems) console.error(`  • ${problem}\n`);
+	process.exit(1);
+}
+
 const publishable = topologicalOrder(
-	packages.filter(({ manifest }) => !manifest.private),
+	// `private` is the intended signal, but it is pure convention and nothing
+	// enforces it, so an example app that forgets the flag would be published to
+	// the public registry. Only `packages/` is ever publishable.
+	packages.filter(
+		({ dir, manifest }) => !manifest.private && dir.startsWith("packages/"),
+	),
 );
 const published: string[] = [];
 const failed: string[] = [];
@@ -79,9 +113,16 @@ for (const { dir, manifest } of publishable) {
 
 	if (run(command, join(ROOT, dir))) {
 		published.push(spec);
-	} else {
-		failed.push(spec);
+		continue;
 	}
+
+	// Everything after this point in the order may declare a peer range on the
+	// package that just failed. Publishing them anyway would point consumers at
+	// a version that never reached the registry, and npm never lets a version
+	// number be reused, so the mistake is permanent.
+	failed.push(spec);
+	console.error(`\n${spec} failed to publish. Stopping before its dependents.`);
+	break;
 }
 
 if (published.length > 0) console.log(`\nPublished: ${published.join(", ")}`);

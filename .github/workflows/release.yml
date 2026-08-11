@@ -13,6 +13,10 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
+    # `push` is gated to main, but `workflow_dispatch` runs against whatever ref
+    # the operator selects. Publishing is irreversible and npm never lets a
+    # version number be reused, so refuse to publish from anything but main.
+    if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
       # Mints the OIDC token npm exchanges for publish rights. Trusted
@@ -42,6 +46,17 @@ jobs:
 
       - name: Build
         run: bun run build
+
+      # ci.yml runs on pull_request only, so an admin merge or a direct push to
+      # main would otherwise reach npm through a weaker gate than a PR does.
+      - name: Type check
+        run: bun run typecheck
+
+      - name: Lint
+        run: bun run lint:check
+
+      - name: Format
+        run: bun run format:check
 
       - name: Test
         run: bun run test
