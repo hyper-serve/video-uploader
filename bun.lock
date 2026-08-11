@@ -145,7 +145,7 @@
     },
     "packages/upload-adapter-hyperserve": {
       "name": "@hyperserve/video-uploader-adapter-hyperserve",
-      "version": "0.1.3-rc.0",
+      "version": "0.1.2",
       "dependencies": {
         "@hyperserve/hyperserve-js": "^0.1.1",
       },
