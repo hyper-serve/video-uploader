@@ -66,13 +66,14 @@ describe("StatusBadge", () => {
 		expect(badge.style.backgroundColor).toBe("rgb(0, 0, 0)");
 	});
 
-	it("renders correct labels for all 6 statuses", () => {
+	it("renders correct labels for all 7 statuses", () => {
 		const statuses: Array<{
 			status: import("@hyperserve/video-uploader").FileStatus;
 			label: string;
 		}> = [
 			{ label: "Selected", status: "selected" },
 			{ label: "Validating", status: "validating" },
+			{ label: "Preparing", status: "preparing" },
 			{ label: "Uploading", status: "uploading" },
 			{ label: "Processing", status: "processing" },
 			{ label: "Ready", status: "ready" },
@@ -290,5 +291,35 @@ describe("ProgressBar", () => {
 
 		const track = container.firstElementChild as HTMLElement;
 		expect(track.style.backgroundColor).toBe("rgb(255, 255, 255)");
+	});
+
+	it("renders an indeterminate variant without aria-valuenow and with animation", () => {
+		const { getByRole } = render(<ProgressBar indeterminate progress={0} />);
+		const bar = getByRole("progressbar");
+		// indeterminate => no concrete value, marked busy
+		expect(bar.hasAttribute("aria-valuenow")).toBe(false);
+		expect(bar.getAttribute("aria-busy")).toBe("true");
+		// fill is an animated sliding band, not width-driven by progress
+		const inner = bar.firstElementChild as HTMLElement;
+		expect(inner.style.animationName).toBe("hs-indeterminate");
+		expect(inner.style.width).not.toBe("0%");
+	});
+
+	it("determinate variant keeps aria-valuenow and is not animated", () => {
+		const { getByRole } = render(<ProgressBar progress={30} />);
+		const bar = getByRole("progressbar");
+		expect(bar.getAttribute("aria-valuenow")).toBe("30");
+		expect(bar.hasAttribute("aria-busy")).toBe(false);
+		const inner = bar.firstElementChild as HTMLElement;
+		expect(inner.style.animationName).toBe("");
+		expect(inner.style.width).toBe("30%");
+	});
+
+	it("injects the indeterminate keyframes into document.head exactly once", () => {
+		render(<ProgressBar indeterminate progress={0} />);
+		render(<ProgressBar indeterminate progress={0} />);
+		const styleTags = document.head.querySelectorAll("#hs-uploader-keyframes");
+		expect(styleTags).toHaveLength(1);
+		expect(styleTags[0].textContent).toContain("hs-indeterminate");
 	});
 });

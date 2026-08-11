@@ -177,7 +177,10 @@ function RemoveButton({
 	if (file.status === "processing" || file.status === "ready") {
 		return null;
 	}
-	const isActive = file.status === "uploading" || file.status === "validating";
+	const isActive =
+		file.status === "uploading" ||
+		file.status === "validating" ||
+		file.status === "preparing";
 	const label = isActive ? cancelLabel : "Remove";
 	return (
 		<button
@@ -254,6 +257,7 @@ export type StatusIconProps = {
 
 const STATUS_ICON_LABELS: Record<FileState["status"], string> = {
 	failed: "Failed",
+	preparing: "Preparing",
 	processing: "Processing",
 	ready: "Ready",
 	selected: "Selected",
@@ -274,7 +278,7 @@ function StatusIcon({
 		return <>{children({ label, status: file.status })}</>;
 	}
 
-	if (file.status === "processing") {
+	if (file.status === "preparing" || file.status === "processing") {
 		return (
 			<span
 				className={className}
@@ -295,7 +299,7 @@ function StatusIcon({
 						...textStyle,
 					}}
 				>
-					Processing...
+					{file.status === "preparing" ? "Preparing..." : "Processing..."}
 				</span>
 			</span>
 		);
@@ -381,11 +385,12 @@ function UploadProgress({
 	fillClassName,
 }: UploadProgressProps) {
 	const { file, styles } = useFileItemContext();
-	if (file.status !== "uploading") return null;
+	if (file.status !== "uploading" && file.status !== "preparing") return null;
 	return (
 		<ProgressBar
 			fillClassName={fillClassName}
 			fillStyle={{ ...styles.progressFill, ...fillStyle }}
+			indeterminate={file.status === "preparing"}
 			progress={file.progress}
 			trackClassName={trackClassName}
 			trackStyle={{ ...styles.progressTrack, ...trackStyle }}

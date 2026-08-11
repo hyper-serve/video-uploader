@@ -30,6 +30,22 @@ describe("ProgressBar (native)", () => {
 		expect(childFn).toHaveBeenCalledWith(75);
 	});
 
+	it("renders an indeterminate variant without a `now` value, marked busy", () => {
+		render(<ProgressBar indeterminate progress={0} />);
+		const bar = screen.getByRole("progressbar");
+		expect(bar.props.accessibilityValue.now).toBeUndefined();
+		expect(bar.props.accessibilityState).toEqual(
+			expect.objectContaining({ busy: true }),
+		);
+	});
+
+	it("determinate variant reports its `now` value and is not busy", () => {
+		render(<ProgressBar progress={30} />);
+		const bar = screen.getByRole("progressbar");
+		expect(bar.props.accessibilityValue.now).toBe(30);
+		expect(bar.props.accessibilityState?.busy).toBeFalsy();
+	});
+
 	it("styles.track applies to the track View", () => {
 		const { UNSAFE_getAllByType } = render(
 			<ProgressBar

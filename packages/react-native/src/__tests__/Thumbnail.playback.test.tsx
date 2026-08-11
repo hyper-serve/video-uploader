@@ -4,12 +4,15 @@ import { Image } from "react-native";
 
 const mockUseVideoPlayer = jest.fn();
 
-jest.mock(
-	"expo-video",
-	() => {
-		const React = require("react");
-		const { Text } = require("react-native");
-		return {
+// Mock the seam we own (getExpoVideo) rather than the external `expo-video`
+// module. That keeps this file independent of whether expo-video resolves and
+// of expoVideo.ts's module-level memo, which Thumbnail.test.tsx's fallback case
+// otherwise populates when the two files share a worker (as under CI).
+jest.mock("../expoVideo", () => {
+	const React = require("react");
+	const { Text } = require("react-native");
+	return {
+		getExpoVideo: () => ({
 			useVideoPlayer: (source: unknown) => {
 				mockUseVideoPlayer(source);
 				return { source };
@@ -20,10 +23,9 @@ jest.mock(
 					{ testID: "video-view" },
 					props.player ? "has-player" : "no-player",
 				),
-		};
-	},
-	{ virtual: true },
-);
+		}),
+	};
+});
 
 import { FileItem } from "../FileItem";
 import { Thumbnail } from "../Thumbnail";

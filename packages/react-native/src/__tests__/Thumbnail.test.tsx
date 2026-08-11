@@ -3,6 +3,12 @@ import { render, screen } from "@testing-library/react-native";
 import { Image } from "react-native";
 import { Thumbnail } from "../Thumbnail";
 
+// Force the "expo-video unavailable" path deterministically. Mocking our own
+// seam (not the external module) also keeps this file from populating
+// expoVideo.ts's memo, which would otherwise leak into
+// Thumbnail.playback.test.tsx when they share a worker (as under CI).
+jest.mock("../expoVideo", () => ({ getExpoVideo: () => null }));
+
 const baseFile: FileState = {
 	error: null,
 	id: "f1",

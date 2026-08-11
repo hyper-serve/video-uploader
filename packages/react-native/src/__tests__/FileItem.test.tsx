@@ -183,6 +183,41 @@ describe("FileItem (native)", () => {
 		expect(screen.queryByRole("progressbar")).toBeNull();
 	});
 
+	it("UploadProgress renders an indeterminate bar for preparing", () => {
+		render(
+			<FileItem file={makeFile({ status: "preparing" })}>
+				<FileItem.UploadProgress />
+			</FileItem>,
+		);
+		const bar = screen.getByRole("progressbar");
+		expect(bar.props.accessibilityValue.now).toBeUndefined();
+		expect(bar.props.accessibilityState).toEqual(
+			expect.objectContaining({ busy: true }),
+		);
+	});
+
+	it("RemoveButton shows Cancel when file is preparing", () => {
+		render(
+			<FileItem file={makeFile({ status: "preparing" })}>
+				<FileItem.RemoveButton />
+			</FileItem>,
+		);
+		expect(screen.getByLabelText("Cancel")).toBeTruthy();
+	});
+
+	it("StatusIcon children render prop receives preparing status and label", () => {
+		const childFn = jest.fn(() => <></>);
+		render(
+			<FileItem file={makeFile({ status: "preparing" })}>
+				<FileItem.StatusIcon>{childFn}</FileItem.StatusIcon>
+			</FileItem>,
+		);
+		expect(childFn).toHaveBeenCalledWith({
+			label: "Preparing",
+			status: "preparing",
+		});
+	});
+
 	it("children render-prop receives file state", () => {
 		const childFn = jest.fn(() => <></>);
 		render(

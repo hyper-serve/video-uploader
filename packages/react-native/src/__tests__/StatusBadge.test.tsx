@@ -8,6 +8,7 @@ describe("StatusBadge (native)", () => {
 		const statuses: Array<{ status: FileStatus; label: string }> = [
 			{ label: "Selected", status: "selected" },
 			{ label: "Validating", status: "validating" },
+			{ label: "Preparing", status: "preparing" },
 			{ label: "Uploading", status: "uploading" },
 			{ label: "Processing", status: "processing" },
 			{ label: "Ready", status: "ready" },

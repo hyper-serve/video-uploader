@@ -223,6 +223,75 @@ describe("FileList and FileItem", () => {
 		expect(screen.getByText("Processing...")).toBeTruthy();
 	});
 
+	it("StatusIcon renders spinner text for preparing status", () => {
+		const file: FileState = {
+			error: null,
+			id: "1",
+			playbackUrl: null,
+			progress: 0,
+			ref: makeRef("clip.mp4", 1024),
+			status: "preparing",
+			statusDetail: null,
+			thumbnailUri: null,
+			videoId: null,
+		};
+
+		render(
+			<FileItem file={file}>
+				<FileItem.StatusIcon />
+			</FileItem>,
+		);
+
+		expect(screen.getByText("Preparing...")).toBeTruthy();
+	});
+
+	it("UploadProgress renders an indeterminate bar for preparing status", () => {
+		const file: FileState = {
+			error: null,
+			id: "1",
+			playbackUrl: null,
+			progress: 0,
+			ref: makeRef("clip.mp4", 1024),
+			status: "preparing",
+			statusDetail: null,
+			thumbnailUri: null,
+			videoId: null,
+		};
+
+		const { container } = render(
+			<FileItem file={file}>
+				<FileItem.UploadProgress />
+			</FileItem>,
+		);
+
+		const bar = container.querySelector("[role='progressbar']") as HTMLElement;
+		expect(bar).toBeTruthy();
+		expect(bar.hasAttribute("aria-valuenow")).toBe(false);
+		expect(bar.getAttribute("aria-busy")).toBe("true");
+	});
+
+	it("RemoveButton shows Cancel label when file is preparing", () => {
+		const file: FileState = {
+			error: null,
+			id: "1",
+			playbackUrl: null,
+			progress: 0,
+			ref: makeRef("clip.mp4", 1024),
+			status: "preparing",
+			statusDetail: null,
+			thumbnailUri: null,
+			videoId: null,
+		};
+
+		render(
+			<FileItem file={file}>
+				<FileItem.RemoveButton />
+			</FileItem>,
+		);
+
+		expect(screen.getByLabelText("Cancel")).toBeTruthy();
+	});
+
 	it("StatusIcon renders check icon for ready status", () => {
 		const file: FileState = {
 			error: null,

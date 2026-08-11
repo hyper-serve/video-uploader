@@ -166,7 +166,7 @@ describe("UploadProvider + useUpload", () => {
 			await vi.advanceTimersByTimeAsync(0);
 		});
 
-		expect(result.current.files[0].status).toBe("uploading");
+		expect(result.current.files[0].status).toBe("preparing");
 		const fileId = result.current.files[0].id;
 
 		act(() => {
@@ -369,6 +369,165 @@ describe("UploadProvider + useUpload", () => {
 		});
 
 		expect(maxActive).toBeLessThanOrEqual(2);
+	});
+
+	it("stays preparing until first onProgress, then transitions to uploading", async () => {
+		let fireProgress: ((pct: number) => void) | undefined;
+		const adapter: UploadAdapter = {
+			upload: vi.fn((_file, _options, callbacks) => {
+				fireProgress = callbacks.onProgress;
+				return new Promise<UploadResult>(() => {});
+			}),
+		};
+		const { result } = renderHook(() => useUpload(), {
+			wrapper: makeWrapper(makeConfig({ adapter })),
+		});
+
+		act(() => {
+			result.current.addFiles([makeFileRef()]);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
+
+		// adapter.upload is running, but no byte-progress yet
+		expect(adapter.upload).toHaveBeenCalled();
+		expect(result.current.files[0].status).toBe("preparing");
+		expect(result.current.files[0].progress).toBe(0);
+
+		// first onProgress transitions preparing -> uploading, even at pct 0
+		act(() => {
+			fireProgress?.(0);
+		});
+		expect(result.current.files[0].status).toBe("uploading");
+		expect(result.current.files[0].progress).toBe(0);
+
+		// subsequent onProgress only updates progress
+		act(() => {
+			fireProgress?.(42);
+		});
+		expect(result.current.files[0].status).toBe("uploading");
+		expect(result.current.files[0].progress).toBe(42);
+	});
+
+	it("ignores a late onProgress from an aborted upload after retry", async () => {
+		const captured: Array<(pct: number) => void> = [];
+		const adapter: UploadAdapter = {
+			upload: vi.fn((_file, _opts, callbacks, signal) => {
+				captured.push(callbacks.onProgress);
+				return new Promise<UploadResult>((_resolve, reject) => {
+					signal.addEventListener("abort", () =>
+						reject(new DOMException("Aborted", "AbortError")),
+					);
+				});
+			}),
+		};
+		const { result } = renderHook(() => useUpload(), {
+			wrapper: makeWrapper(makeConfig({ adapter })),
+		});
+
+		act(() => {
+			result.current.addFiles([makeFileRef()]);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
+		expect(result.current.files[0].status).toBe("preparing");
+
+		// Retry aborts the first upload and re-enqueues; a second upload starts.
+		act(() => {
+			result.current.retryFile(result.current.files[0].id);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
+		expect(result.current.files[0].status).toBe("preparing");
+		expect(captured).toHaveLength(2);
+
+		// A late onProgress from the FIRST (aborted) upload must not resurrect
+		// the file's status or apply stale progress.
+		act(() => {
+			captured[0](42);
+		});
+		expect(result.current.files[0].status).toBe("preparing");
+		expect(result.current.files[0].progress).toBe(0);
+	});
+
+	it("goes straight from preparing to ready when upload resolves without onProgress", async () => {
+		// A tiny/fast upload may resolve without ever emitting onProgress. The
+		// file must not get stuck in "preparing" nor flash a phantom "uploading".
+		const seenStatuses: string[] = [];
+		const adapter: UploadAdapter = {
+			upload: vi.fn(() =>
+				Promise.resolve({
+					metadata: { isPublic: true },
+					playbackUrl: "https://cdn.example.com/done.mp4",
+					videoId: "v1",
+				}),
+			),
+		};
+		const { result } = renderHook(() => useUpload(), {
+			wrapper: makeWrapper(makeConfig({ adapter })),
+		});
+
+		act(() => {
+			result.current.addFiles([makeFileRef()]);
+		});
+		await act(async () => {
+			seenStatuses.push(result.current.files[0]?.status);
+			await vi.advanceTimersByTimeAsync(0);
+		});
+
+		expect(result.current.files[0].status).toBe("ready");
+		expect(result.current.files[0].progress).toBe(100);
+		// It never entered "uploading" (no byte-progress was ever reported).
+		expect(seenStatuses).not.toContain("uploading");
+	});
+
+	it("counts a preparing file toward isUploading", async () => {
+		const adapter: UploadAdapter = {
+			upload: vi.fn(() => new Promise<UploadResult>(() => {})),
+		};
+		const { result } = renderHook(() => useUpload(), {
+			wrapper: makeWrapper(makeConfig({ adapter })),
+		});
+		act(() => {
+			result.current.addFiles([makeFileRef()]);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
+		expect(result.current.files[0].status).toBe("preparing");
+		expect(result.current.isUploading).toBe(true);
+	});
+
+	it("counts preparing files toward maxConcurrentUploads", async () => {
+		let uploadCalls = 0;
+		const adapter: UploadAdapter = {
+			upload: vi.fn(() => {
+				uploadCalls++;
+				// never resolves, never fires onProgress => stays preparing
+				return new Promise<UploadResult>(() => {});
+			}),
+		};
+		const { result } = renderHook(() => useUpload(), {
+			wrapper: makeWrapper(makeConfig({ adapter, maxConcurrentUploads: 2 })),
+		});
+		act(() => {
+			result.current.addFiles([
+				makeFileRef("a.mp4"),
+				makeFileRef("b.mp4"),
+				makeFileRef("c.mp4"),
+			]);
+		});
+		await act(async () => {
+			await vi.advanceTimersByTimeAsync(0);
+		});
+		// A preparing file occupies a slot: only 2 spawned, the third waits.
+		expect(uploadCalls).toBe(2);
+		const statuses = result.current.files.map((f) => f.status);
+		expect(statuses.filter((s) => s === "preparing")).toHaveLength(2);
+		expect(statuses.filter((s) => s === "selected")).toHaveLength(1);
 	});
 
 	it("sets allReady true when all files complete", async () => {
@@ -592,7 +751,7 @@ describe("UploadProvider + useUpload", () => {
 			await vi.advanceTimersByTimeAsync(0);
 		});
 
-		expect(result.current.files[0].status).toBe("uploading");
+		expect(result.current.files[0].status).toBe("preparing");
 
 		act(() => {
 			result.current.retryFile(result.current.files[0].id);
@@ -628,7 +787,7 @@ describe("UploadProvider + useUpload", () => {
 			await vi.advanceTimersByTimeAsync(0);
 		});
 
-		expect(result.current.files[0].status).toBe("uploading");
+		expect(result.current.files[0].status).toBe("preparing");
 
 		unmount();
 
