@@ -9,7 +9,7 @@ Headless cross-platform video upload for React and React Native. Manage upload s
 | [`@hyperserve/video-uploader`](./packages/core) | Core hooks, state machine, validation |
 | [`@hyperserve/video-uploader-react`](./packages/react) | Web UI components (DropZone, FileList, etc.) |
 | [`@hyperserve/video-uploader-react-native`](./packages/react-native) | React Native UI components |
-| [`@hyperserve/video-uploader-adapter-hyperserve`](./packages/upload-adapter-hyperserve) | Official Hyperserve backend adapter |
+| [`@hyperserve/video-uploader-adapter-hyperserve`](./packages/upload-adapter-hyperserve) | Official backend adapter for [Hyperserve](https://hyperserve.io/?utm_source=github&utm_medium=readme&utm_campaign=video-uploader&utm_content=packages-table) |
 
 ## Installation
 
@@ -22,6 +22,8 @@ npm install @hyperserve/video-uploader @hyperserve/video-uploader-react-native @
 ```
 
 ## Quick Start
+
+This example uses the Hyperserve adapter, which needs an API key from a free [Hyperserve](https://hyperserve.io/?utm_source=github&utm_medium=readme&utm_campaign=video-uploader&utm_content=quick-start) account. Any other backend works too via a custom adapter.
 
 ```tsx
 import { createHyperserveConfig } from "@hyperserve/video-uploader-adapter-hyperserve";
@@ -62,3 +64,7 @@ Full docs at [videouploader.fyi](https://videouploader.fyi) — guides, componen
 ## License
 
 MIT
+
+---
+
+Built and maintained by [Hyperserve](https://hyperserve.io/?utm_source=github&utm_medium=readme&utm_campaign=video-uploader&utm_content=footer), video infrastructure for developers.
