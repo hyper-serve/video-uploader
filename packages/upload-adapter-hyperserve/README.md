@@ -1,6 +1,6 @@
 # @hyperserve/video-uploader-adapter-hyperserve
 
-Official Hyperserve adapter for `@hyperserve/video-uploader`. Handles file upload to Hyperserve-managed storage via signed URLs and polls for processing status.
+Official [Hyperserve](https://hyperserve.io/?utm_source=npm&utm_medium=readme&utm_campaign=video-uploader&utm_content=adapter-package) adapter for `@hyperserve/video-uploader`. Handles file upload to Hyperserve-managed storage via signed URLs and polls for processing status.
 
 ## Install
 

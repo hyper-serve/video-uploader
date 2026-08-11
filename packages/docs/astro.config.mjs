@@ -164,7 +164,7 @@ export default defineConfig({
 			],
 			social: [
 				{
-					href: "https://hyperserve.io",
+					href: "https://hyperserve.io/?utm_source=docs&utm_medium=header&utm_campaign=video-uploader",
 					icon: "external",
 					label: "Hyperserve",
 				},
