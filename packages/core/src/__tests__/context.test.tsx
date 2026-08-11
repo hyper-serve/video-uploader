@@ -453,6 +453,37 @@ describe("UploadProvider + useUpload", () => {
 		expect(result.current.files[0].progress).toBe(0);
 	});
 
+	it("goes straight from preparing to ready when upload resolves without onProgress", async () => {
+		// A tiny/fast upload may resolve without ever emitting onProgress. The
+		// file must not get stuck in "preparing" nor flash a phantom "uploading".
+		const seenStatuses: string[] = [];
+		const adapter: UploadAdapter = {
+			upload: vi.fn(() =>
+				Promise.resolve({
+					metadata: { isPublic: true },
+					playbackUrl: "https://cdn.example.com/done.mp4",
+					videoId: "v1",
+				}),
+			),
+		};
+		const { result } = renderHook(() => useUpload(), {
+			wrapper: makeWrapper(makeConfig({ adapter })),
+		});
+
+		act(() => {
+			result.current.addFiles([makeFileRef()]);
+		});
+		await act(async () => {
+			seenStatuses.push(result.current.files[0]?.status);
+			await vi.advanceTimersByTimeAsync(0);
+		});
+
+		expect(result.current.files[0].status).toBe("ready");
+		expect(result.current.files[0].progress).toBe(100);
+		// It never entered "uploading" (no byte-progress was ever reported).
+		expect(seenStatuses).not.toContain("uploading");
+	});
+
 	it("counts a preparing file toward isUploading", async () => {
 		const adapter: UploadAdapter = {
 			upload: vi.fn(() => new Promise<UploadResult>(() => {})),
