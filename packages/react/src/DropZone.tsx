@@ -7,12 +7,14 @@ import { colors, radius } from "./theme";
 
 export type DropZoneRenderProps = {
 	isDragging: boolean;
+	isDisabled: boolean;
 	openPicker: () => void;
 };
 
 export type DropZoneStyles = {
 	root?: React.CSSProperties;
 	activeRoot?: React.CSSProperties;
+	disabledRoot?: React.CSSProperties;
 	icon?: React.CSSProperties;
 	primaryText?: React.CSSProperties;
 	browseText?: React.CSSProperties;
@@ -126,15 +128,13 @@ export function DropZone({
 		backgroundColor: isDragging ? colors.dropZoneActiveBg : colors.dropZoneBg,
 		border: `1.5px dashed ${colors.dropZoneBorder}`,
 		borderRadius: radius.xl,
-		cursor: isDisabled ? "not-allowed" : "pointer",
+		cursor: "pointer",
 		display: "flex",
 		flexDirection: "column",
 		gap: "0.375rem",
 		justifyContent: "center",
 		minHeight: 160,
-		opacity: isDisabled ? 0.6 : 1,
 		padding: "1.5rem",
-		pointerEvents: isDisabled ? "none" : undefined,
 		transition: "border-color 0.2s ease, background-color 0.2s ease",
 		...slots?.root,
 		...style,
@@ -144,6 +144,13 @@ export function DropZone({
 					borderColor: colors.dropZoneActiveBorder,
 					...slots?.activeRoot,
 					...activeStyle,
+				}
+			: {}),
+		...(isDisabled
+			? {
+					cursor: "not-allowed",
+					opacity: 0.6,
+					...slots?.disabledRoot,
 				}
 			: {}),
 	};
@@ -171,7 +178,7 @@ export function DropZone({
 				type="file"
 			/>
 			{typeof children === "function"
-				? children({ isDragging, openPicker })
+				? children({ isDisabled, isDragging, openPicker })
 				: (children ?? (
 						<>
 							<div

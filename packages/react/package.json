@@ -1,6 +1,6 @@
 {
 	"name": "@hyperserve/video-uploader-react",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"author": "Ryan Trann",
 	"description": "Composable React UI components for @hyperserve/video-uploader",
 	"license": "MIT",
