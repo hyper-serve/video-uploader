@@ -39,6 +39,7 @@ Pass a `styles` slot map to theme the default inner content without replacing it
 |------|---------|
 | `root` | The outer drop-zone container (merged on top of `style`) |
 | `activeRoot` | Container styles applied during drag hover (merged on top of `activeStyle`) |
+| `disabledRoot` | Container styles applied while disabled (merged on top of the built-in dimming) |
 | `icon` | The default upload icon |
 | `primaryText` | The "Drop files here" headline |
 | `browseText` | The "browse" link inside the headline |
@@ -84,6 +85,7 @@ import type { DropZoneRenderProps } from "@hyperserve/video-uploader-react";
 
 type DropZoneRenderProps = {
   isDragging: boolean;
+  isDisabled: boolean;
   openPicker: () => void;
 };
 ```
