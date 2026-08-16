@@ -70,7 +70,7 @@ export default defineConfig({
 								"@id": "https://videouploader.fyi/#website",
 								"@type": "WebSite",
 								description:
-									"Single or multi-video uploads for React and React Native. Headless and full UI kit.",
+									"Single or multi-video uploads for React and React Native. Headless or fully customizable UI kit.",
 								name: "Universal Video Uploader",
 								publisher: { "@id": "https://hyperserve.io/#organization" },
 								url: "https://videouploader.fyi",
@@ -81,7 +81,7 @@ export default defineConfig({
 								applicationCategory: "DeveloperApplication",
 								author: { "@id": "https://hyperserve.io/#organization" },
 								description:
-									"Single or multi-video uploads for React and React Native. Headless and full UI kit.",
+									"Single or multi-video uploads for React and React Native. Headless or fully customizable UI kit.",
 								image: "https://videouploader.fyi/og.png",
 								name: "Universal Video Uploader",
 								offers: { "@type": "Offer", price: 0, priceCurrency: "USD" },
