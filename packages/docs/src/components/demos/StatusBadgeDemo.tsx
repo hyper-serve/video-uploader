@@ -4,6 +4,7 @@ import { StatusBadge } from "@hyperserve/video-uploader-react";
 const statuses: FileStatus[] = [
 	"selected",
 	"validating",
+	"preparing",
 	"uploading",
 	"processing",
 	"ready",

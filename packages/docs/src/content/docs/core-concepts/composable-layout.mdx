@@ -57,8 +57,8 @@ function App() {
 | `Thumbnail` | Thumbnail image while uploading; `<video>` when `playback` is set and file is ready |
 | `FileItem.FileName` | Always |
 | `FileItem.FileSize` | Always |
-| `FileItem.StatusIcon` | Spinner during `processing`, check when `ready` |
-| `FileItem.UploadProgress` | Only during `uploading` |
+| `FileItem.StatusIcon` | Spinner during `preparing`/`processing`, check when `ready` |
+| `FileItem.UploadProgress` | During `uploading`, and indeterminate during `preparing` |
 | `FileItem.ErrorMessage` | Only when `file.error` is set |
 | `FileItem.RemoveButton` | Hidden during `processing` and `ready` |
 | `FileItem.RetryButton` | Only when `failed` |

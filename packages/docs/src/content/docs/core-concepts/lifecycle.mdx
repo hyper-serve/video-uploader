@@ -8,10 +8,10 @@ Every file in the upload queue moves through a defined set of statuses from the 
 ## State machine
 
 ```
-selected ──► validating ──► uploading ──► processing ──► ready
-                │                │              │
-                ▼                ▼              ▼
-              failed          failed         failed
+selected ──► validating ──► preparing ──► uploading ──► processing ──► ready
+             │              │             │             │
+             ▼              ▼             ▼             ▼
+           failed         failed        failed        failed
 
 retry (from failed) ──► selected (re-enters the flow)
 ```
@@ -20,6 +20,7 @@ retry (from failed) ──► selected (re-enters the flow)
 |--------|-------------|
 | `selected` | File added, queued for an upload slot |
 | `validating` | Running client-side validation (size, type, duration) |
+| `preparing` | Validation passed; upload slot claimed and transfer starting, but no bytes have flowed yet. Progress is indeterminate |
 | `uploading` | Upload in progress, `progress` updates via adapter callback |
 | `processing` | Upload complete, backend is processing (transcoding, etc.) |
 | `ready` | Backend processing complete. `playbackUrl` is set if the adapter or status checker provided one; otherwise the integrator can patch it in via `updateFileStatus` |
