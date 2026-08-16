@@ -18,7 +18,7 @@ const {
   updateFileStatus,   // (videoId, status, data?) => void
   canAddMore,         // boolean: false when files.length >= maxFiles
   maxFiles,           // number | undefined
-  isUploading,        // true if any file is validating or uploading
+  isUploading,        // true if any file is validating, preparing, or uploading
   hasErrors,          // true if any file is failed
   allReady,           // true when all files are ready (and list non-empty)
   allSettled,         // true when all files are ready or failed (and list non-empty)

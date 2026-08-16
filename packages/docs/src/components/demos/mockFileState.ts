@@ -38,6 +38,13 @@ export const selectedFile: FileState = {
 	thumbnailUri: THUMB_URL,
 };
 
+export const preparingFile: FileState = {
+	...base,
+	id: "mock-preparing",
+	status: "preparing",
+	thumbnailUri: THUMB_URL,
+};
+
 export const uploadingFile: FileState = {
 	...base,
 	id: "mock-uploading",

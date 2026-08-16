@@ -5,6 +5,7 @@ description: Compound component for rendering individual file upload states.
 
 import FileItemDemo from "../../../components/demos/FileItemDemo";
 import FileItemColumnDemo from "../../../components/demos/FileItemColumnDemo";
+import FileItemPreparingDemo from "../../../components/demos/FileItemPreparingDemo";
 
 FileItem is a compound component that renders a single file's upload state. Compose its named sub-components (`FileItem.FileName`, `FileItem.UploadProgress`, `FileItem.Actions`, etc.) to build custom layouts, or omit `children` entirely to use the built-in `FileItem.Content` default.
 
@@ -41,6 +42,19 @@ import { FileItem, Thumbnail } from "@hyperserve/video-uploader-react";
 </FileItem>
 ```
 
+## Preparing state
+
+`preparing` is the pre-transfer status a file holds after validation passes but before the first byte flows (see [Lifecycle](/core-concepts/lifecycle/)). Because there's no measurable percentage yet, `FileItem.UploadProgress` renders an **indeterminate** bar and `FileItem.StatusIcon` shows a spinner with "Preparing...". `FileItem.RemoveButton` stays visible as **Cancel**, since the upload can still be aborted.
+
+<FileItemPreparingDemo client:load />
+
+```tsx
+// file.status === "preparing"
+<FileItem file={file} layout="row">
+  <FileItem.Content />
+</FileItem>
+```
+
 ## Props
 
 | Prop | Type | Default | Description |
@@ -63,10 +77,10 @@ All sub-components read from the parent `FileItem` context. They don't need expl
 | `FileItem.ErrorMessage` | Renders `file.error` when present |
 | `FileItem.RemoveButton` | Hidden during `processing`/`ready` |
 | `FileItem.RetryButton` | Only shown when `failed` |
-| `FileItem.StatusIcon` | Spinner during `processing`, check mark when `ready` |
+| `FileItem.StatusIcon` | Spinner during `preparing`/`processing`, check mark when `ready` |
 | `FileItem.Meta` | Flex row container for status metadata |
 | `FileItem.Actions` | Flex column container for action buttons |
-| `FileItem.UploadProgress` | Progress bar, visible only during `uploading` |
+| `FileItem.UploadProgress` | Progress bar, visible during `uploading` and (indeterminate) `preparing` |
 | `FileItem.PlaybackPreview` | Thumbnail in playback mode, visible only when `ready` |
 | `FileItem.Content` | Opinionated default layout combining all sub-components |
 
@@ -88,7 +102,7 @@ Pass a `styles` slot map to theme every internal element from one prop. Slots me
 | `removeButton` | `FileItem.RemoveButton` button |
 | `retryButton` | `FileItem.RetryButton` button |
 | `statusIcon` | `FileItem.StatusIcon` outer span |
-| `statusText` | "Processing..." text inside `StatusIcon` |
+| `statusText` | "Preparing..."/"Processing..." text inside `StatusIcon` |
 | `meta` | `FileItem.Meta` flex row |
 | `actions` | `FileItem.Actions` flex column |
 | `progressTrack` | `FileItem.UploadProgress` track |
