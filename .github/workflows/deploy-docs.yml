@@ -1,0 +1,39 @@
+name: Deploy Docs
+
+# The docs site is the only package without an npm release path; it ships to
+# Fly.io instead. Deploy whenever anything it bundles changes on main: its own
+# source, plus core and react, whose components the docs demos import.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/docs/**"
+      - "packages/core/**"
+      - "packages/react/**"
+      - "package.json"
+      - "bun.lock"
+      - ".github/workflows/deploy-docs.yml"
+  workflow_dispatch:
+
+# A newer push should supersede an in-flight deploy of older code.
+concurrency:
+  group: deploy-docs
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # workflow_dispatch runs against whatever ref the operator selects; prod
+    # only ever serves main.
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      # The Dockerfile copies workspace manifests from the repo root, so the
+      # build context must be the root, not packages/docs.
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only --config packages/docs/fly.toml --dockerfile packages/docs/Dockerfile
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
